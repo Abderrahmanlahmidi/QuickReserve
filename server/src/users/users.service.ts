@@ -54,7 +54,7 @@ export class UsersService {
       };
     } catch (error) {
       throw new InternalServerErrorException({
-        message: `Error creating user error:${error}`,
+        message: `Error creating user error:${error}.`,
       });
     }
   }
