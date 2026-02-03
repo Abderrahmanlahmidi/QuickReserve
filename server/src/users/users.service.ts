@@ -7,13 +7,18 @@ import {
 import { DRIZZLE } from '../db/drizzle.module';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../db/schema';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from './dto/create-user.dto';
 import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) {}
+  constructor(
+    @Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>,
+    private jwtService: JwtService,
+  ) {}
 
   async register(createUserDto: CreateUserDto) {
     const { firstName, lastName, email, password } = createUserDto;
@@ -73,5 +78,38 @@ export class UsersService {
         error: error.message,
       });
     }
+  }
+
+  async login(loginDto: LoginUserDto) {
+    const { email, password } = loginDto;
+
+    const user = await this.db.query.users.findFirst({
+      where: eq(schema.users.email, email),
+      with: { role: true },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.roleId,
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+      },
+    };
   }
 }
