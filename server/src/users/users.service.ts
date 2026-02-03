@@ -84,7 +84,7 @@ export class UsersService {
     const { email, password } = loginDto;
     console.log('Login attempt for:', email);
 
-    // 1. جيب المستخدم
+
     const results = await this.db
       .select()
       .from(schema.users)
@@ -93,13 +93,12 @@ export class UsersService {
 
     const user = results[0];
 
-    // 2. إذا لم يوجد المستخدم
+
     if (!user) {
       console.log('User not found');
       throw new UnauthorizedException('Email or password incorrect');
     }
 
-    // 3. مقارنة الباسورد
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log('Password valid:', isPasswordValid);
 
@@ -107,7 +106,6 @@ export class UsersService {
       throw new UnauthorizedException('Email or password incorrect');
     }
 
-    // 4. توليد الـ Token
     const payload = { sub: user.id, email: user.email };
     const token = await this.jwtService.signAsync(payload);
 

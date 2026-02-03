@@ -23,10 +23,10 @@ export default function Hero() {
                   Simplified
                 </span>
               </h1>
-              
+
               {/* Subtitle */}
               <p className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
-                Transform your reservation process with QuickReserve. Streamline bookings, 
+                Transform your reservation process with QuickReserve. Streamline bookings,
                 manage schedules, and delight your customers with our intuitive platform.
               </p>
             </div>
