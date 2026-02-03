@@ -82,29 +82,37 @@ export class UsersService {
 
   async login(loginDto: LoginUserDto) {
     const { email, password } = loginDto;
+    console.log('Login attempt for:', email);
 
-    const user = await this.db.query.users.findFirst({
-      where: eq(schema.users.email, email),
-      with: { role: true },
-    });
+    // 1. جيب المستخدم
+    const results = await this.db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.email, email))
+      .limit(1);
 
+    const user = results[0];
+
+    // 2. إذا لم يوجد المستخدم
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      console.log('User not found');
+      throw new UnauthorizedException('Email or password incorrect');
     }
 
+    // 3. مقارنة الباسورد
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log('Password valid:', isPasswordValid);
+
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email or password incorrect');
     }
 
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      role: user.roleId,
-    };
+    // 4. توليد الـ Token
+    const payload = { sub: user.id, email: user.email };
+    const token = await this.jwtService.signAsync(payload);
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: token,
       user: {
         id: user.id,
         email: user.email,

@@ -18,7 +18,7 @@ import {
 import FormInput from "../../../../components/ui/FormInput";
 import Alert from "../../../../components/mod/atoms/Alert";
 import { RegisterFormData, ApiResponse } from "../../../../types/auth";
-import { registerUser } from "../../../../lib/auth/register";
+import { registerUser } from "../../../../lib/auth/auth";
 
 export default function RegisterPage() {
   const router = useRouter();

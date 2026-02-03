@@ -1,4 +1,4 @@
-import { RegisterFormData, ApiResponse } from "../../types/auth";
+import { RegisterFormData, ApiResponse, LoginFormData, LoginResponse } from "../../types/auth";
 import axiosClient from "../axios-client";
 
 export const registerUser = async (data: RegisterFormData): Promise<ApiResponse> => {
@@ -6,5 +6,11 @@ export const registerUser = async (data: RegisterFormData): Promise<ApiResponse>
   const { confirmPassword, ...registerData } = data;
 
   const response = await axiosClient.post<ApiResponse>("/users/register", registerData);
-  return response;
+  return response.data;
+};
+
+export const loginUser = async (data: LoginFormData): Promise<LoginResponse> => {
+  const response = await axiosClient.post<LoginResponse>("/users/login", data);
+  
+  return response.data; 
 };
