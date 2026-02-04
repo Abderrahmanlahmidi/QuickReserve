@@ -29,12 +29,12 @@ async function main() {
     ])
     .onConflictDoNothing();
 
-  console.log('✅ Seeding completed!');
+  console.log('✅ Seeding completed');
   process.exit(0);
 }
 
 main().catch((err) => {
-  console.error('❌ Seeding failed!');
+  console.error('❌ Seeding failed');
   console.error(err);
   process.exit(1);
 });

@@ -145,6 +145,26 @@ export default function EventFormOverlay({
                             </select>
                         </div>
                     </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-neutral-400 mb-1.5 ml-1">
+                            Status
+                        </label>
+                        <div className="relative">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                                <AlignLeft size={18} />
+                            </div>
+                            <select
+                                {...register("status")}
+                                className="w-full pl-11 pr-4 py-3 bg-neutral-800/50 border border-neutral-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-white appearance-none"
+                            >
+                                <option value="UPCOMING">Upcoming</option>
+                                <option value="ONGOING">Ongoing</option>
+                                <option value="COMPLETED">Completed</option>
+                                <option value="CANCELED">Canceled</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4">
