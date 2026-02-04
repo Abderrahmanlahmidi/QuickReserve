@@ -64,9 +64,10 @@ export default function Navbar({ }: Props) {
   }, []);
 
   useEffect(() => {
-    if (isOpen) setIsOpen(false);
-    if (isProfileOpen) setIsProfileOpen(false);
-  }, [pathname, isOpen, isProfileOpen]);
+    setIsOpen(false);
+    setIsProfileOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const handleLogout = () => {
     Cookies.remove("access_token", { path: '/' });
