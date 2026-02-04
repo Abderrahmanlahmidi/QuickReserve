@@ -60,7 +60,7 @@ export default function EventFormOverlay({
                 date: "",
                 location: "",
                 capacity: 0,
-                status: "UPCOMING",
+                status: "DRAFT",
                 categoryId: "",
             });
         }
@@ -158,9 +158,8 @@ export default function EventFormOverlay({
                                 {...register("status")}
                                 className="w-full pl-11 pr-4 py-3 bg-neutral-800/50 border border-neutral-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-white appearance-none"
                             >
-                                <option value="UPCOMING">Upcoming</option>
-                                <option value="ONGOING">Ongoing</option>
-                                <option value="COMPLETED">Completed</option>
+                                <option value="DRAFT">Draft</option>
+                                <option value="PUBLISHED">Published</option>
                                 <option value="CANCELED">Canceled</option>
                             </select>
                         </div>

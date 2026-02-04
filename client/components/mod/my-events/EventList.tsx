@@ -105,7 +105,7 @@ export default function EventList({ initialEvents, categories }: EventListProps)
                                     <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
                                         {event.title}
                                     </h3>
-                                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${event.status === 'UPCOMING' ? 'bg-blue-500/20 text-blue-400' : 'bg-green-500/20 text-green-400'
+                                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${event.status === 'DRAFT' ? 'bg-amber-500/20 text-amber-400' : event.status === 'PUBLISHED' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
                                         }`}>
                                         {event.status}
                                     </span>

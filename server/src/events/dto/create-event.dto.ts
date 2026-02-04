@@ -9,9 +9,8 @@ import {
 } from 'class-validator';
 
 export enum EventStatus {
-  UPCOMING = 'UPCOMING',
-  ONGOING = 'ONGOING',
-  COMPLETED = 'COMPLETED',
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
   CANCELED = 'CANCELED',
 }
 
