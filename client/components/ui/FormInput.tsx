@@ -17,43 +17,41 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     const inputType = isPassword && showPassword ? "text" : type;
 
     return (
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-neutral-300">
+      <div className="space-y-1.5">
+        <label className="block text-sm font-medium text-neutral-300 tracking-wide ml-1">
           {label}
         </label>
-        <div className="relative">
+        <div className="relative group">
           {Icon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500">
+            <div className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-neutral-500 group-focus-within:text-primary transition-colors duration-200">
               <Icon size={18} />
             </div>
           )}
-          
+
           <input
             ref={ref}
             type={inputType}
-            className={`w-full px-4 py-3 bg-neutral-800/50 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors placeholder:text-neutral-500 ${
-              Icon ? "pl-11" : "pl-4"
-            } ${
-              error
-                ? "border-danger focus:ring-danger focus:border-danger"
-                : "border-neutral-700"
-            } ${className}`}
+            className={`w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary/50 outline-none transition-all duration-200 placeholder:text-neutral-600 text-white shadow-inner ${Icon ? "pl-11" : "pl-4"
+              } ${error
+                ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/10"
+                : "hover:border-white/20"
+              } ${className}`}
             {...props}
           />
-          
+
           {isPassword && (
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors"
+              className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-white transition-colors p-1 rounded-md hover:bg-white/5"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           )}
         </div>
         {error && (
-          <p className="text-sm text-danger mt-1">{error}</p>
+          <p className="text-xs font-medium text-red-400 ml-1 animate-fade-in">{error}</p>
         )}
       </div>
     );

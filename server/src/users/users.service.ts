@@ -18,7 +18,7 @@ export class UsersService {
   constructor(
     @Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(createUserDto: CreateUserDto) {
     const { firstName, lastName, email, password } = createUserDto;
@@ -86,8 +86,16 @@ export class UsersService {
 
 
     const results = await this.db
-      .select()
+      .select({
+        id: schema.users.id,
+        email: schema.users.email,
+        firstName: schema.users.firstName,
+        lastName: schema.users.lastName,
+        password: schema.users.password,
+        role: schema.roles.name,
+      })
       .from(schema.users)
+      .leftJoin(schema.roles, eq(schema.users.roleId, schema.roles.id))
       .where(eq(schema.users.email, email))
       .limit(1);
 
@@ -106,7 +114,7 @@ export class UsersService {
       throw new UnauthorizedException('Email or password incorrect');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, role: user.role };
     const token = await this.jwtService.signAsync(payload);
 
     return {
@@ -115,6 +123,8 @@ export class UsersService {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
       },
     };
   }

@@ -3,51 +3,24 @@ import LoginForm from "../../../../components/mod/login/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-neutral-900">
-      {/* Billboard Background */}
-      <div className="relative min-h-screen bg-gradient-to-br from-neutral-900 via-neutral-900/95 to-neutral-900">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left side - Branding */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center space-x-3 p-3 bg-neutral-800/50 backdrop-blur-sm rounded-lg border border-neutral-700">
-                <div className="p-2 bg-primary rounded-lg">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-white">QuickReserve</h2>
-                  <p className="text-sm text-neutral-400">Smart Booking Platform</p>
-                </div>
-              </div>
+    <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4 relative overflow-hidden">
 
-              <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  Welcome Back to <span className="text-primary">QuickReserve</span>
-                </h1>
-                <p className="text-lg text-neutral-300 mb-8">
-                  Access your booking dashboard and manage all your reservations in one place.
-                </p>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] opacity-20" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px] opacity-20" />
+      </div>
 
-                <div className="space-y-4">
-                  {[
-                    "Manage all your bookings",
-                    "Access real-time updates",
-                    "Team collaboration tools",
-                    "24/7 customer support",
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <span className="text-neutral-200">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right side - Login Form */}
-            <LoginForm />
+      <div className="w-full max-w-md relative z-10 space-y-8">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center justify-center p-3 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-xl mb-4">
+            <Calendar className="w-8 h-8 text-white" />
           </div>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Welcome Back</h1>
+          <p className="text-neutral-400">Sign in to manage your bookings</p>
         </div>
+
+        <LoginForm />
+
       </div>
     </div>
   );

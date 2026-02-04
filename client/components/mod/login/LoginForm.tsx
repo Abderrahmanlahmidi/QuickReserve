@@ -1,4 +1,5 @@
 "use client";
+import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -27,17 +28,18 @@ export default function LoginForm() {
         },
     });
 
+
+
     const mutation = useMutation<LoginResponse, Error, LoginFormData>({
         mutationFn: loginUser,
         onSuccess: (data) => {
             if (data.access_token && data.user) {
-                localStorage.setItem("access_token", data.access_token);
-                localStorage.setItem("user", JSON.stringify(data.user));
+                Cookies.set("access_token", data.access_token, { expires: 7, path: '/' });
+                Cookies.set("user", JSON.stringify(data.user), { expires: 7, path: '/' });
 
                 setLoginSuccess(true);
                 setServerError(null);
 
-                // Dispatch storage event to update Navbar immediately
                 window.dispatchEvent(new Event("storage"));
 
                 setTimeout(() => {
@@ -70,19 +72,7 @@ export default function LoginForm() {
     }, [loginSuccess]);
 
     return (
-        <div className="bg-neutral-800/30 backdrop-blur-sm rounded-2xl border border-neutral-700 p-8">
-            <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-white mb-2">
-                    Sign In to Your Account
-                </h2>
-                <p className="text-neutral-400">
-                    Don't have an account?{" "}
-                    <Link href="/auth/register" className="text-primary font-semibold hover:underline">
-                        Create one
-                    </Link>
-                </p>
-            </div>
-
+        <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-10">
             {/* Success Alert */}
             {loginSuccess && (
                 <Alert
@@ -91,7 +81,6 @@ export default function LoginForm() {
                     message={
                         <div>
                             <p>You have successfully logged in.</p>
-                            <p className="mt-1">Redirecting to dashboard...</p>
                         </div>
                     }
                     className="mb-6"
@@ -201,6 +190,14 @@ export default function LoginForm() {
                     )}
                 </button>
             </form>
+            <div className="mt-8 pt-6 border-t border-white/10 text-center">
+                <p className="text-neutral-400 text-sm">
+                    Don't have an account?{" "}
+                    <Link href="/auth/register" className="text-primary font-semibold hover:text-primary-hover transition-colors">
+                        Create one now
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }

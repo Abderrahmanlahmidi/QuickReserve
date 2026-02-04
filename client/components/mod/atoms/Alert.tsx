@@ -14,31 +14,31 @@ interface AlertProps {
 const alertConfig = {
   success: {
     icon: CheckCircle,
-    bgColor: "bg-success/10",
-    borderColor: "border-success/30",
-    textColor: "text-success",
-    iconColor: "text-success",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/20",
+    textColor: "text-green-400",
+    iconColor: "text-green-500",
   },
   error: {
     icon: XCircle,
-    bgColor: "bg-danger/10",
-    borderColor: "border-danger/30",
-    textColor: "text-danger",
-    iconColor: "text-danger",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+    textColor: "text-red-400",
+    iconColor: "text-red-500",
   },
   warning: {
     icon: AlertCircle,
-    bgColor: "bg-warning/10",
-    borderColor: "border-warning/30",
-    textColor: "text-warning",
-    iconColor: "text-warning",
+    bgColor: "bg-yellow-500/10",
+    borderColor: "border-yellow-500/20",
+    textColor: "text-yellow-400",
+    iconColor: "text-yellow-500",
   },
   info: {
     icon: Info,
-    bgColor: "bg-info/10",
-    borderColor: "border-info/30",
-    textColor: "text-info",
-    iconColor: "text-info",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/20",
+    textColor: "text-blue-400",
+    iconColor: "text-blue-500",
   },
 };
 
@@ -54,7 +54,7 @@ export default function Alert({
 
   return (
     <div
-      className={`flex items-start p-4 border rounded-lg ${config.bgColor} ${config.borderColor} ${className}`}
+      className={`flex items-start p-4 border rounded-xl backdrop-blur-md shadow-sm ${config.bgColor} ${config.borderColor} ${className}`}
       role="alert"
     >
       <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${config.iconColor}`} />

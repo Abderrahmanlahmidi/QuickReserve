@@ -3,51 +3,23 @@ import RegisterForm from "../../../../components/mod/register/RegisterForm";
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen bg-neutral-900">
-      {/* Billboard Background */}
-      <div className="relative min-h-screen bg-linear-to-br from-neutral-900 via-neutral-900/95 to-neutral-900">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left side - Branding */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center space-x-3 p-3 bg-neutral-800/50 backdrop-blur-sm rounded-lg border border-neutral-700">
-                <div className="p-2 bg-primary rounded-lg">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-white">QuickReserve</h2>
-                  <p className="text-sm text-neutral-400">Smart Booking Platform</p>
-                </div>
-              </div>
+    <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] opacity-20" />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[128px] opacity-20" />
+      </div>
 
-              <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  Join Thousands of <span className="text-white">Successful</span> Businesses
-                </h1>
-                <p className="text-lg text-neutral-300 mb-8">
-                  Start streamlining your booking process today. No credit card required for the 14-day free trial.
-                </p>
-
-                <div className="space-y-4">
-                  {[
-                    "Secure and reliable platform",
-                    "24/7 customer support",
-                    "Easy-to-use interface",
-                    "Scalable for businesses of all sizes",
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-success" />
-                      <span className="text-neutral-200">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right side - Registration Form */}
-            <RegisterForm />
+      <div className="w-full max-w-2xl relative z-10 space-y-8">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center justify-center p-3 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-xl mb-4">
+            <Calendar className="w-8 h-8 text-primary" />
           </div>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Create an Account</h1>
+          <p className="text-neutral-400">Join thousands of successful businesses</p>
         </div>
+
+        <RegisterForm />
       </div>
     </div>
   );

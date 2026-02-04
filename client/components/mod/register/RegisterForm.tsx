@@ -63,18 +63,8 @@ export default function RegisterForm() {
     };
 
     return (
-        <div className="bg-neutral-800/30 backdrop-blur-sm rounded-2xl border border-neutral-700 p-8">
-            <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-white mb-2">
-                    Create Your Account
-                </h2>
-                <p className="text-neutral-400">
-                    Already have an account?{" "}
-                    <Link href="/auth/login" className="text-primary font-semibold hover:underline">
-                        Sign in
-                    </Link>
-                </p>
-            </div>
+        <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-10">
+            {/* Header removed */}
 
             {/* Success Alert */}
             {showSuccess && (
@@ -230,10 +220,19 @@ export default function RegisterForm() {
                     )}
                 </button>
 
-                <div className="text-center text-sm text-neutral-400">
+                <div className="text-center text-xs text-neutral-500 mt-6">
                     By creating an account, you agree to our terms and acknowledge our privacy policy.
                 </div>
             </form>
+
+            <div className="mt-8 pt-6 border-t border-white/10 text-center">
+                <p className="text-neutral-400 text-sm">
+                    Already have an account?{" "}
+                    <Link href="/auth/login" className="text-primary font-semibold hover:text-primary-hover transition-colors">
+                        Sign in instead
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }
