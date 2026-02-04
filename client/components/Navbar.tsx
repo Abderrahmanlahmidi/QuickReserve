@@ -87,6 +87,7 @@ export default function Navbar({ }: Props) {
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
+    { href: "/events", label: "Events", icon: Calendar },
     { href: "/about", label: "About", icon: Info },
     { href: "/contact", label: "Contact", icon: Mail },
   ];

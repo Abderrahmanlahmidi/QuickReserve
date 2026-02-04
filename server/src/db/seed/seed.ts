@@ -17,6 +17,18 @@ async function main() {
     .values([{ name: 'ADMIN' }, { name: 'PARTICIPANT' }])
     .onConflictDoNothing();
 
+  await db
+    .insert(schema.categories)
+    .values([
+      { name: 'Music' },
+      { name: 'Technology' },
+      { name: 'Art' },
+      { name: 'Sports' },
+      { name: 'Business' },
+      { name: 'Education' },
+    ])
+    .onConflictDoNothing();
+
   console.log('✅ Seeding completed!');
   process.exit(0);
 }
