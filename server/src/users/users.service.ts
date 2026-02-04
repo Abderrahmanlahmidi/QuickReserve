@@ -71,11 +71,12 @@ export class UsersService {
         message: 'User registered successfully',
         user: newUser,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new InternalServerErrorException({
         message: 'Error creating user',
-        error: error.message,
+        error: errorMessage,
       });
     }
   }

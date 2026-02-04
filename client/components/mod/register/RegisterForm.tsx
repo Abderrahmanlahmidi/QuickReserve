@@ -11,7 +11,6 @@ import {
     Lock,
     ArrowRight,
     Shield,
-    CheckCircle,
 } from "lucide-react";
 import FormInput from "../../ui/FormInput";
 import Alert from "../atoms/Alert";

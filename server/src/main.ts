@@ -14,4 +14,4 @@ async function bootstrap() {
   await app.listen(Number(process.env.PORT));
   console.log(`API is running on: http://localhost:${process.env.PORT}`);
 }
-bootstrap();
+void bootstrap();

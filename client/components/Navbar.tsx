@@ -8,8 +8,6 @@ import {
   Home,
   Info,
   Mail,
-  LogIn,
-  UserPlus,
   Menu,
   X,
   Calendar,
@@ -19,7 +17,7 @@ import {
 import UserDropdown from "./mod/navbar/UserDropdown";
 import MobileMenu from "./mod/navbar/MobileMenu";
 
-type Props = {};
+type Props = Record<string, never>;
 
 export default function Navbar({ }: Props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,9 +64,9 @@ export default function Navbar({ }: Props) {
   }, []);
 
   useEffect(() => {
-    setIsOpen(false);
-    setIsProfileOpen(false);
-  }, [pathname]);
+    if (isOpen) setIsOpen(false);
+    if (isProfileOpen) setIsProfileOpen(false);
+  }, [pathname, isOpen, isProfileOpen]);
 
   const handleLogout = () => {
     Cookies.remove("access_token", { path: '/' });

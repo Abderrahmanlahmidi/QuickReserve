@@ -1,4 +1,4 @@
-import { ArrowRight, Star, Check, Zap } from "lucide-react";
+import { ArrowRight, Star, Zap } from "lucide-react";
 
 
 export default function Hero() {
