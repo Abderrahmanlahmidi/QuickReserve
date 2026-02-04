@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
@@ -12,26 +13,76 @@ import {
   Menu,
   X,
   Calendar,
+
 } from "lucide-react";
+
+import UserDropdown from "./mod/navbar/UserDropdown";
+import MobileMenu from "./mod/navbar/MobileMenu";
 
 type Props = {};
 
 export default function Navbar({ }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<{ firstName: string; lastName?: string; email: string; role: string } | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
+
+
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
+
+    // Check for authenticated user
+    const checkAuth = () => {
+      // Check cookies first
+      const cookieUser = Cookies.get("user");
+      if (cookieUser) {
+        try {
+          setUser(JSON.parse(cookieUser));
+          return;
+        } catch (e) {
+          console.error("Failed to parse user cookie", e);
+        }
+      }
+
+      // Fallback or legacy check/cleanup could go here, but for now just check cookie
+      setUser(null);
+    };
+
+    checkAuth();
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // Listen for custom storage event/window updates
+    window.addEventListener("storage", checkAuth);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("storage", checkAuth);
+    };
   }, []);
 
   useEffect(() => {
     setIsOpen(false);
+    setIsProfileOpen(false);
   }, [pathname]);
+
+  const handleLogout = () => {
+    Cookies.remove("access_token", { path: '/' });
+    Cookies.remove("user", { path: '/' });
+
+    // Also clear localStorage just in case
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
+
+    setUser(null);
+    setIsProfileOpen(false);
+    setIsOpen(false);
+    router.push("/auth/login");
+  };
 
   const isActive = (path: string) => pathname === path;
 
@@ -41,49 +92,13 @@ export default function Navbar({ }: Props) {
     { href: "/contact", label: "Contact", icon: Mail },
   ];
 
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      height: "auto",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const menuItemVariants = {
-    closed: { opacity: 0, x: -20 },
-    open: { opacity: 1, x: 0 },
-  };
-
-  const backdropVariants = {
-    closed: { opacity: 0 },
-    open: { opacity: 1 },
-  };
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      setIsOpen(false);
-    }
-  };
-
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-neutral-900 border-b border-neutral-800"
-            : "bg-neutral-900/95 backdrop-blur-sm"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled
+          ? "bg-neutral-900/80 backdrop-blur-md border-neutral-800"
+          : "bg-transparent border-transparent"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -92,15 +107,15 @@ export default function Navbar({ }: Props) {
               href="/"
               className="flex items-center space-x-3 group"
             >
-              <div className="p-2 border border-neutral-700 rounded-lg group-hover:border-primary transition-colors duration-200">
-                <Calendar size={20} className="text-white group-hover:text-primary transition-colors duration-200" />
+              <div className="p-2 border border-white/10 rounded-xl bg-white/5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-300">
+                <Calendar size={20} className="text-white transition-colors duration-300" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg font-semibold text-white tracking-tight">
+                <h1 className="text-lg font-bold text-white tracking-tight">
                   QuickReserve
                 </h1>
-                <span className="text-xs text-neutral-400 font-medium">
-                  SMART BOOKING
+                <span className="text-[10px] text-neutral-400 font-medium tracking-widest uppercase">
+                  Smart Booking
                 </span>
               </div>
             </Link>
@@ -111,41 +126,49 @@ export default function Navbar({ }: Props) {
                 <Link
                   key={href}
                   href={href}
-                  className={`flex items-center space-x-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                    isActive(href)
-                      ? "text-white bg-neutral-800"
-                      : "text-neutral-300 hover:text-white hover:bg-neutral-800"
-                  }`}
+                  className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${isActive(href)
+                    ? "text-white bg-white/10 ring-1 ring-white/5"
+                    : "text-neutral-400 hover:text-white hover:bg-white/5"
+                    }`}
                 >
-                  <Icon size={16} />
+                  <Icon size={16} className={isActive(href) ? "text-white" : ""} />
                   <span>{label}</span>
                 </Link>
               ))}
             </div>
 
-            {/* Desktop Auth Buttons */}
+            {/* Desktop Auth Section */}
             <div className="hidden md:flex items-center space-x-3">
-              <Link
-                href="/auth/login"
-                className="flex items-center space-x-2 px-4 py-2.5 text-sm font-medium text-neutral-300 rounded-lg border border-neutral-700 transition-colors duration-200 hover:text-white hover:border-neutral-600 hover:bg-neutral-800"
-              >
-                <LogIn size={16} />
-                <span>Login</span>
-              </Link>
-
-              <Link
-                href="/auth/register"
-                className="flex items-center space-x-2 px-4 py-2.5 text-sm font-medium text-white bg-primary rounded-lg transition-colors duration-200 hover:bg-primary-hover"
-              >
-                <UserPlus size={16} />
-                <span>Register</span>
-              </Link>
+              {user ? (
+                <UserDropdown
+                  user={user}
+                  isProfileOpen={isProfileOpen}
+                  setIsProfileOpen={setIsProfileOpen}
+                  handleLogout={handleLogout}
+                />
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="flex items-center space-x-2 px-5 py-2 text-sm font-medium text-neutral-300 transition-colors duration-200 hover:text-white"
+                  >
+                    <span>Login</span>
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="group relative flex items-center space-x-2 px-5 py-2 text-sm font-medium text-white bg-primary rounded-full transition-all duration-300 hover:bg-primary-hover shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5"
+                  >
+                    <span>Register</span>
+                    <div className="absolute inset-0 rounded-full ring-1 ring-white/20 group-hover:ring-white/30" />
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
             <motion.button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 text-neutral-300 hover:text-white rounded-lg transition-colors duration-200"
+              className="md:hidden p-2 text-neutral-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors duration-200"
               aria-label="Toggle menu"
               whileTap={{ scale: 0.95 }}
             >
@@ -177,85 +200,14 @@ export default function Navbar({ }: Props) {
         </div>
       </nav>
 
-      {/* Mobile Menu Backdrop (Full Screen Overlay) */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={backdropVariants}
-            className="md:hidden fixed inset-0 z-40 bg-neutral-900/95 backdrop-blur-sm"
-            onClick={handleBackdropClick}
-          >
-            {/* Mobile Menu Content */}
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={menuVariants}
-              className="pt-20 pb-8 px-4 border-t border-neutral-800"
-            >
-              <div className="max-w-md mx-auto space-y-2">
-                {/* Mobile Navigation Links */}
-                {navLinks.map(({ href, label, icon: Icon }, index) => (
-                  <motion.div
-                    key={href}
-                    variants={menuItemVariants}
-                    initial="closed"
-                    animate="open"
-                    exit="closed"
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Link
-                      href={href}
-                      className={`flex items-center space-x-3 px-4 py-3.5 rounded-lg transition-colors duration-200 ${
-                        isActive(href)
-                          ? "text-white bg-neutral-800"
-                          : "text-neutral-300 hover:text-white hover:bg-neutral-800"
-                      }`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <Icon size={20} />
-                      <span className="font-medium">{label}</span>
-                      {isActive(href) && (
-                        <div className="ml-auto w-2 h-2 bg-primary rounded-full"></div>
-                      )}
-                    </Link>
-                  </motion.div>
-                ))}
-
-                {/* Mobile Auth Buttons */}
-                <motion.div
-                  variants={menuItemVariants}
-                  initial="closed"
-                  animate="open"
-                  exit="closed"
-                  transition={{ delay: navLinks.length * 0.05 }}
-                  className="pt-4 mt-4 border-t border-neutral-800 space-y-3"
-                >
-                  <Link
-                    href="/auth/login"
-                    className="flex items-center space-x-3 px-4 py-3.5 text-neutral-300 font-medium rounded-lg border border-neutral-700 transition-colors duration-200 hover:text-white hover:border-neutral-600 hover:bg-neutral-800"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <LogIn size={20} />
-                    <span>Login</span>
-                  </Link>
-                  <Link
-                    href="/auth/register"
-                    className="flex items-center space-x-3 px-4 py-3.5 text-white font-medium bg-primary rounded-lg transition-colors duration-200 hover:bg-primary-hover"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <UserPlus size={20} />
-                    <span>Register</span>
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MobileMenu
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        user={user}
+        navLinks={navLinks}
+        isActive={isActive}
+        handleLogout={handleLogout}
+      />
     </>
   );
 }
