@@ -15,6 +15,13 @@ export const statusEnum = pgEnum('status', [
   'CANCELED',
 ]);
 
+export const eventStatusEnum = pgEnum('event_status', [
+  'UPCOMING',
+  'ONGOING',
+  'COMPLETED',
+  'CANCELED',
+]);
+
 export const roles = pgTable('roles', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 50 }).unique().notNull(),
@@ -37,9 +44,13 @@ export const categories = pgTable('categories', {
 export const events = pgTable('events', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: varchar('title', { length: 255 }).notNull(),
-  capacity: integer('capacity').notNull(),
+  description: varchar('description', { length: 1000 }),
   date: timestamp('date').notNull(),
+  location: varchar('location', { length: 255 }),
+  capacity: integer('capacity').notNull(),
+  status: eventStatusEnum('status').default('UPCOMING'),
   categoryId: uuid('category_id').references(() => categories.id),
+  createdBy: uuid('created_by').references(() => users.id),
 });
 
 export const reservations = pgTable('reservations', {

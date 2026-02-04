@@ -1,4 +1,4 @@
-import { Calendar, CheckCircle } from "lucide-react";
+import { Calendar } from "lucide-react";
 import RegisterForm from "../../../../components/mod/register/RegisterForm";
 
 export default function RegisterPage() {

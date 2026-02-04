@@ -8,8 +8,6 @@ import {
   Home,
   Info,
   Mail,
-  LogIn,
-  UserPlus,
   Menu,
   X,
   Calendar,
@@ -19,7 +17,7 @@ import {
 import UserDropdown from "./mod/navbar/UserDropdown";
 import MobileMenu from "./mod/navbar/MobileMenu";
 
-type Props = {};
+type Props = Record<string, never>;
 
 export default function Navbar({ }: Props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,6 +66,7 @@ export default function Navbar({ }: Props) {
   useEffect(() => {
     setIsOpen(false);
     setIsProfileOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const handleLogout = () => {
@@ -88,6 +87,7 @@ export default function Navbar({ }: Props) {
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
+    { href: "/events", label: "Events", icon: Calendar },
     { href: "/about", label: "About", icon: Info },
     { href: "/contact", label: "Contact", icon: Mail },
   ];

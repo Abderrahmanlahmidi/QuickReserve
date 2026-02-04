@@ -22,7 +22,7 @@ interface MobileMenuProps {
     navLinks: {
         href: string;
         label: string;
-        icon: any;
+        icon: React.ElementType;
     }[];
     isActive: (path: string) => boolean;
     handleLogout: () => void;

@@ -3,10 +3,7 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    User,
     LogOut,
-    LayoutDashboard,
-    Settings,
     ChevronDown,
 } from "lucide-react";
 
@@ -63,30 +60,16 @@ export default function UserDropdown({
                             <p className="text-xs text-neutral-400 truncate mt-0.5">{user.email}</p>
                         </div>
                         <div className="p-2 space-y-0.5">
-                            <Link
-                                href="/dashboard"
-                                className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-300 rounded-xl hover:bg-white/5 hover:text-white transition-all duration-200 group"
-                                onClick={() => setIsProfileOpen(false)}
-                            >
-                                <LayoutDashboard size={18} className="text-neutral-400 group-hover:text-white transition-colors" />
-                                <span>Dashboard</span>
-                            </Link>
-                            <Link
-                                href="/profile"
-                                className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-300 rounded-xl hover:bg-white/5 hover:text-white transition-all duration-200 group"
-                                onClick={() => setIsProfileOpen(false)}
-                            >
-                                <User size={18} className="text-neutral-400 group-hover:text-white transition-colors" />
-                                <span>Profile</span>
-                            </Link>
-                            <Link
-                                href="/settings"
-                                className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-300 rounded-xl hover:bg-white/5 hover:text-white transition-all duration-200 group"
-                                onClick={() => setIsProfileOpen(false)}
-                            >
-                                <Settings size={18} className="text-neutral-400 group-hover:text-white transition-colors" />
-                                <span>Settings</span>
-                            </Link>
+                            {user.role === 'ADMIN' && (
+                                <Link
+                                    href="/my-events"
+                                    className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-300 rounded-xl hover:bg-white/5 hover:text-white transition-all duration-200 group"
+                                    onClick={() => setIsProfileOpen(false)}
+                                >
+                                    <ChevronDown size={18} className="text-neutral-400 group-hover:text-white transition-colors rotate-90" />
+                                    <span>My Events</span>
+                                </Link>
+                            )}
                         </div>
                         <div className="p-2 border-t border-white/5 bg-white/[0.02]">
                             <button
