@@ -37,13 +37,13 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-neutral-900 border border-white/10 rounded-3xl shadow-2xl z-[70] overflow-hidden"
+                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white border border-neutral-200 rounded-3xl z-[70] overflow-hidden"
                     >
-                        <div className="flex items-center justify-between p-6 border-b border-white/10">
-                            <h3 className="text-xl font-bold text-white">{title}</h3>
+                        <div className="flex items-center justify-between p-6 border-b border-neutral-100">
+                            <h3 className="text-xl font-black text-neutral-900">{title}</h3>
                             <button
                                 onClick={onClose}
-                                className="p-2 text-neutral-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                                className="p-2 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all"
                             >
                                 <X size={20} />
                             </button>

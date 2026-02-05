@@ -72,7 +72,7 @@ export default function LoginForm() {
     }, [loginSuccess]);
 
     return (
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-10">
+        <div className="bg-white rounded-3xl border border-neutral-200 p-8 sm:p-10">
             {/* Success Alert */}
             {loginSuccess && (
                 <Alert
@@ -101,7 +101,7 @@ export default function LoginForm() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Email */}
                 <div>
-                    <label className="block text-sm font-medium text-neutral-300 mb-2">
+                    <label className="block text-sm font-medium text-neutral-600 mb-2">
                         Email Address
                     </label>
                     <div className="relative">
@@ -117,9 +117,9 @@ export default function LoginForm() {
                                     message: "Invalid email address",
                                 },
                             })}
-                            className={`w-full pl-11 pr-4 py-3 bg-neutral-800/50 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors placeholder:text-neutral-500 ${errors.email
+                            className={`w-full pl-11 pr-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors placeholder:text-neutral-400 text-neutral-900 ${errors.email
                                 ? "border-danger focus:ring-danger focus:border-danger"
-                                : "border-neutral-700"
+                                : "border-neutral-300"
                                 }`}
                             placeholder="john@example.com"
                         />
@@ -133,7 +133,7 @@ export default function LoginForm() {
 
                 {/* Password */}
                 <div>
-                    <label className="block text-sm font-medium text-neutral-300 mb-2">
+                    <label className="block text-sm font-medium text-neutral-600 mb-2">
                         Password
                     </label>
                     <div className="relative">
@@ -149,16 +149,16 @@ export default function LoginForm() {
                                     message: "Password must be at least 6 characters",
                                 },
                             })}
-                            className={`w-full pl-11 pr-12 py-3 bg-neutral-800/50 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors placeholder:text-neutral-500 ${errors.password
+                            className={`w-full pl-11 pr-12 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors placeholder:text-neutral-400 text-neutral-900 ${errors.password
                                 ? "border-danger focus:ring-danger focus:border-danger"
-                                : "border-neutral-700"
+                                : "border-neutral-300"
                                 }`}
                             placeholder="Enter your password"
                         />
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-700 transition-colors"
                             aria-label={showPassword ? "Hide password" : "Show password"}
                         >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -190,8 +190,8 @@ export default function LoginForm() {
                     )}
                 </button>
             </form>
-            <div className="mt-8 pt-6 border-t border-white/10 text-center">
-                <p className="text-neutral-400 text-sm">
+            <div className="mt-8 pt-6 border-t border-neutral-100 text-center">
+                <p className="text-neutral-500 text-sm">
                     Don&apos;t have an account?{" "}
                     <Link href="/auth/register" className="text-primary font-semibold hover:text-primary-hover transition-colors">
                         Create one now

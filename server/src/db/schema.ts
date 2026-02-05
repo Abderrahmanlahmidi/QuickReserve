@@ -16,9 +16,8 @@ export const statusEnum = pgEnum('status', [
 ]);
 
 export const eventStatusEnum = pgEnum('event_status', [
-  'UPCOMING',
-  'ONGOING',
-  'COMPLETED',
+  'DRAFT',
+  'PUBLISHED',
   'CANCELED',
 ]);
 
@@ -48,7 +47,7 @@ export const events = pgTable('events', {
   date: timestamp('date').notNull(),
   location: varchar('location', { length: 255 }),
   capacity: integer('capacity').notNull(),
-  status: eventStatusEnum('status').default('UPCOMING'),
+  status: eventStatusEnum('status').default('DRAFT'),
   categoryId: uuid('category_id').references(() => categories.id),
   createdBy: uuid('created_by').references(() => users.id),
 });

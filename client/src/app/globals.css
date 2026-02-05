@@ -1,34 +1,42 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-poppins), sans-serif;
+  --font-sans: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  --color-primary: #171717;
-  --color-primary-hover: #262626;
+  /* Airbnb Primary (Rausch) */
+  --color-primary: #FF385C;
+  --color-primary-hover: #D90B3E;
 
-  --color-secondary: #525252;
-  --color-secondary-hover: #171717;
+  /* Secondary/Text */
+  --color-secondary: #222222;
+  --color-secondary-hover: #000000;
 
-  --color-success: #15803d;
-  --color-success-hover: #14532d;
+  /* Status Colors (Muted/Professional) */
+  --color-success: #008A05;
+  --color-success-hover: #006C04;
 
-  --color-danger: #b91c1c;
-  --color-danger-hover: #7f1d1d;
+  --color-danger: #C13515;
+  --color-danger-hover: #A02B11;
 
-  --color-warning: #a16207;
-  --color-warning-hover: #713f12;
+  --color-warning: #F59E0B;
+  --color-warning-hover: #D97706;
 
-  --color-info: #404040;
-  --color-info-hover: #171717;
+  --color-info: #222222;
+  --color-info-hover: #000000;
 
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-300: #d4d4d4;
-  --color-neutral-400: #a3a3a3;
-  --color-neutral-500: #737373;
-  --color-neutral-600: #525252;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
+  /* Neutral Scale (Airbnb Grays) */
+  --color-neutral-50: #FFFFFF;
+  --color-neutral-100: #F7F7F7;
+  /* Common BG */
+  --color-neutral-200: #DDDDDD;
+  /* Borders */
+  --color-neutral-300: #B0B0B0;
+  --color-neutral-400: #717171;
+  /* Subtext */
+  --color-neutral-500: #5E5E5E;
+  --color-neutral-600: #484848;
+  --color-neutral-700: #222222;
+  /* Body Text */
+  --color-neutral-800: #191919;
+  --color-neutral-900: #000000;
 }

@@ -60,7 +60,7 @@ export default function EventFormOverlay({
                 date: "",
                 location: "",
                 capacity: 0,
-                status: "UPCOMING",
+                status: "DRAFT",
                 categoryId: "",
             });
         }
@@ -78,16 +78,16 @@ export default function EventFormOverlay({
                 />
 
                 <div>
-                    <label className="block text-sm font-medium text-neutral-400 mb-1.5 ml-1">
+                    <label className="block text-sm font-medium text-neutral-600 mb-1.5 ml-1">
                         Description
                     </label>
                     <div className="relative">
-                        <div className="absolute left-3 top-3 text-neutral-500">
+                        <div className="absolute left-3 top-3 text-neutral-400">
                             <AlignLeft size={18} />
                         </div>
                         <textarea
                             {...register("description")}
-                            className="w-full pl-11 pr-4 py-3 bg-neutral-800/50 border border-neutral-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-neutral-500 min-h-[100px] text-white"
+                            className="w-full pl-11 pr-4 py-3 bg-white border border-neutral-300 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-neutral-400 min-h-[100px] text-neutral-900"
                             placeholder="Tell us about the event..."
                         />
                     </div>
@@ -125,20 +125,20 @@ export default function EventFormOverlay({
                     />
 
                     <div>
-                        <label className="block text-sm font-medium text-neutral-400 mb-1.5 ml-1">
+                        <label className="block text-sm font-medium text-neutral-600 mb-1.5 ml-1">
                             Category
                         </label>
                         <div className="relative">
-                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">
                                 <Tag size={18} />
                             </div>
                             <select
                                 {...register("categoryId", { required: "Category is required" })}
-                                className="w-full pl-11 pr-4 py-3 bg-neutral-800/50 border border-neutral-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-white appearance-none"
+                                className="w-full pl-11 pr-4 py-3 bg-white border border-neutral-300 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900 appearance-none"
                             >
-                                <option value="">Select Category</option>
+                                <option value="" className="text-neutral-900">Select Category</option>
                                 {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>
+                                    <option key={cat.id} value={cat.id} className="text-neutral-900">
                                         {cat.name}
                                     </option>
                                 ))}
@@ -147,21 +147,20 @@ export default function EventFormOverlay({
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-neutral-400 mb-1.5 ml-1">
+                        <label className="block text-sm font-medium text-neutral-600 mb-1.5 ml-1">
                             Status
                         </label>
                         <div className="relative">
-                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">
                                 <AlignLeft size={18} />
                             </div>
                             <select
                                 {...register("status")}
-                                className="w-full pl-11 pr-4 py-3 bg-neutral-800/50 border border-neutral-700 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-white appearance-none"
+                                className="w-full pl-11 pr-4 py-3 bg-white border border-neutral-300 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900 appearance-none"
                             >
-                                <option value="UPCOMING">Upcoming</option>
-                                <option value="ONGOING">Ongoing</option>
-                                <option value="COMPLETED">Completed</option>
-                                <option value="CANCELED">Canceled</option>
+                                <option value="DRAFT" className="text-neutral-900">Draft</option>
+                                <option value="PUBLISHED" className="text-neutral-900">Published</option>
+                                <option value="CANCELED" className="text-neutral-900">Canceled</option>
                             </select>
                         </div>
                     </div>
@@ -171,14 +170,14 @@ export default function EventFormOverlay({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-6 py-2.5 rounded-xl border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 transition-all"
+                        className="px-6 py-2.5 rounded-xl border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-all font-medium"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="px-6 py-2.5 rounded-xl bg-primary text-white font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-primary/20"
+                        className="px-6 py-2.5 rounded-xl bg-primary text-white font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     >
                         {isLoading ? "Saving..." : "Save Event"}
                     </button>

@@ -96,8 +96,8 @@ export default function Navbar({ }: Props) {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled
-          ? "bg-neutral-900/80 backdrop-blur-md border-neutral-800"
-          : "bg-transparent border-transparent"
+          ? "bg-white/80 backdrop-blur-md border-neutral-200"
+          : "bg-white/0 border-transparent"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,16 +107,13 @@ export default function Navbar({ }: Props) {
               href="/"
               className="flex items-center space-x-3 group"
             >
-              <div className="p-2 border border-white/10 rounded-xl bg-white/5 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-300">
-                <Calendar size={20} className="text-white transition-colors duration-300" />
+              <div className="p-2 border border-neutral-200 rounded-full bg-white group-hover:border-primary/20 group-hover:bg-primary/5 transition-all duration-300">
+                <Calendar size={20} className="text-primary transition-colors duration-300" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg font-bold text-white tracking-tight">
-                  QuickReserve
+                <h1 className="text-lg font-bold text-primary tracking-tight">
+                  quickreserve
                 </h1>
-                <span className="text-[10px] text-neutral-400 font-medium tracking-widest uppercase">
-                  Smart Booking
-                </span>
               </div>
             </Link>
 
@@ -127,11 +124,11 @@ export default function Navbar({ }: Props) {
                   key={href}
                   href={href}
                   className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${isActive(href)
-                    ? "text-white bg-white/10 ring-1 ring-white/5"
-                    : "text-neutral-400 hover:text-white hover:bg-white/5"
+                    ? "text-neutral-900 bg-neutral-100 font-semibold"
+                    : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50"
                     }`}
                 >
-                  <Icon size={16} className={isActive(href) ? "text-white" : ""} />
+                  <Icon size={16} className={isActive(href) ? "text-primary" : ""} />
                   <span>{label}</span>
                 </Link>
               ))}
@@ -150,13 +147,13 @@ export default function Navbar({ }: Props) {
                 <>
                   <Link
                     href="/auth/login"
-                    className="flex items-center space-x-2 px-5 py-2 text-sm font-medium text-neutral-300 transition-colors duration-200 hover:text-white"
+                    className="flex items-center space-x-2 px-5 py-2 text-sm font-medium text-neutral-600 transition-colors duration-200 hover:text-neutral-900 hover:bg-neutral-50 rounded-full"
                   >
                     <span>Login</span>
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="group relative flex items-center space-x-2 px-5 py-2 text-sm font-medium text-white bg-primary rounded-full transition-all duration-300 hover:bg-primary-hover shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5"
+                    className="group relative flex items-center space-x-2 px-5 py-2 text-sm font-medium text-white bg-primary rounded-full transition-all duration-300 hover:bg-primary-hover hover:-translate-y-0.5"
                   >
                     <span>Register</span>
                     <div className="absolute inset-0 rounded-full ring-1 ring-white/20 group-hover:ring-white/30" />
@@ -168,7 +165,7 @@ export default function Navbar({ }: Props) {
             {/* Mobile Menu Button */}
             <motion.button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 text-neutral-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors duration-200"
+              className="md:hidden p-2 text-neutral-600 hover:text-neutral-900 bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors duration-200"
               aria-label="Toggle menu"
               whileTap={{ scale: 0.95 }}
             >
