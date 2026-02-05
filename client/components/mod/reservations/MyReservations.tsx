@@ -55,7 +55,7 @@ export default function MyReservations() {
                     </p>
                     <Link
                         href="/events"
-                        className="inline-block mt-6 px-8 py-3 bg-primary text-white font-bold rounded-2xl hover:bg-primary/90 transition-all active:scale-95"
+                        className="inline-block mt-6 px-8 py-3 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-colors"
                     >
                         Explore Events
                     </Link>
@@ -65,7 +65,7 @@ export default function MyReservations() {
                     {reservations?.map((res: any) => (
                         <div
                             key={res.id}
-                            className="group bg-white border border-neutral-200 rounded-[32px] overflow-hidden hover:border-primary/20 transition-all duration-300 hover:scale-[1.02] flex flex-col"
+                            className="group bg-white border border-neutral-200 rounded-[32px] overflow-hidden hover:border-primary/30 transition-colors flex flex-col"
                         >
                             <div className="p-6 flex-grow space-y-4">
                                 <div className="flex items-start justify-between">

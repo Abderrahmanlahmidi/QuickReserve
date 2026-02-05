@@ -123,7 +123,7 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
                 <div className="pt-2">
                     <button
                         onClick={() => router.push('/my-bookings')}
-                        className="w-full py-3 bg-white border border-neutral-200 text-neutral-900 font-semibold rounded-xl hover:bg-neutral-50 transition-all font-medium shadow-sm active:scale-95 transition-transform"
+                        className="w-full py-3 bg-white border border-neutral-200 text-neutral-900 font-semibold rounded-xl hover:bg-neutral-50 transition-colors font-medium"
                     >
                         View My Bookings
                     </button>
@@ -153,7 +153,7 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
             <button
                 onClick={handleReserve}
                 disabled={mutation.isPending}
-                className="w-full py-4 bg-primary text-white font-black text-lg rounded-2xl hover:bg-primary/90 transition-all disabled:opacity-50 flex items-center justify-center space-x-2 active:scale-95 transition-transform"
+                className="w-full py-4 bg-primary text-white font-black text-lg rounded-2xl hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
             >
                 {mutation.isPending ? (
                     <Loader2 size={24} className="animate-spin" />

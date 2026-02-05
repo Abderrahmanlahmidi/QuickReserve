@@ -63,7 +63,7 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
                         <Link
                             href={`/events/${event.id}`}
                             key={event.id}
-                            className="group bg-white border border-neutral-200 rounded-3xl overflow-hidden hover:border-primary/20 transition-all duration-300 hover:scale-[1.02] flex flex-col"
+                            className="group bg-white border border-neutral-200 rounded-3xl overflow-hidden hover:border-primary/30 transition-colors flex flex-col"
                         >
                             <div className="p-6 space-y-4 flex-1">
                                 <div className="flex items-start justify-between">

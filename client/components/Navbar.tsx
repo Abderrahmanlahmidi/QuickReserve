@@ -24,6 +24,7 @@ export default function Navbar({ }: Props) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<{ firstName: string; lastName?: string; email: string; role: string } | null>(null);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -34,27 +35,23 @@ export default function Navbar({ }: Props) {
       setScrolled(window.scrollY > 10);
     };
 
-    // Check for authenticated user
     const checkAuth = () => {
-      // Check cookies first
       const cookieUser = Cookies.get("user");
       if (cookieUser) {
         try {
           setUser(JSON.parse(cookieUser));
-          return;
         } catch (e) {
           console.error("Failed to parse user cookie", e);
+          setUser(null);
         }
+      } else {
+        setUser(null);
       }
-
-      // Fallback or legacy check/cleanup could go here, but for now just check cookie
-      setUser(null);
+      setIsAuthChecked(true);
     };
 
     checkAuth();
     window.addEventListener("scroll", handleScroll);
-
-    // Listen for custom storage event/window updates
     window.addEventListener("storage", checkAuth);
 
     return () => {
@@ -88,8 +85,8 @@ export default function Navbar({ }: Props) {
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/events", label: "Events", icon: Calendar },
-    { href: "/about", label: "About", icon: Info },
-    { href: "/contact", label: "Contact", icon: Mail },
+    { href: "/#about", label: "About", icon: Info },
+    { href: "/#contact", label: "Contact", icon: Mail },
   ];
 
   return (
@@ -136,29 +133,35 @@ export default function Navbar({ }: Props) {
 
             {/* Desktop Auth Section */}
             <div className="hidden md:flex items-center space-x-3">
-              {user ? (
-                <UserDropdown
-                  user={user}
-                  isProfileOpen={isProfileOpen}
-                  setIsProfileOpen={setIsProfileOpen}
-                  handleLogout={handleLogout}
-                />
+              {isAuthChecked ? (
+                user ? (
+                  <UserDropdown
+                    user={user}
+                    isProfileOpen={isProfileOpen}
+                    setIsProfileOpen={setIsProfileOpen}
+                    handleLogout={handleLogout}
+                  />
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/login"
+                      className="flex items-center space-x-2 px-5 py-2 text-sm font-medium text-neutral-600 transition-colors duration-200 hover:text-neutral-900 hover:bg-neutral-50 rounded-full"
+                    >
+                      <span>Login</span>
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      className="group relative flex items-center space-x-2 px-5 py-2 text-sm font-medium text-white bg-primary rounded-full transition-colors hover:bg-primary-hover"
+                    >
+                      <span>Register</span>
+                      <div className="absolute inset-0 rounded-full ring-1 ring-white/20 group-hover:ring-white/30" />
+                    </Link>
+                  </>
+                )
               ) : (
-                <>
-                  <Link
-                    href="/auth/login"
-                    className="flex items-center space-x-2 px-5 py-2 text-sm font-medium text-neutral-600 transition-colors duration-200 hover:text-neutral-900 hover:bg-neutral-50 rounded-full"
-                  >
-                    <span>Login</span>
-                  </Link>
-                  <Link
-                    href="/auth/register"
-                    className="group relative flex items-center space-x-2 px-5 py-2 text-sm font-medium text-white bg-primary rounded-full transition-all duration-300 hover:bg-primary-hover hover:-translate-y-0.5"
-                  >
-                    <span>Register</span>
-                    <div className="absolute inset-0 rounded-full ring-1 ring-white/20 group-hover:ring-white/30" />
-                  </Link>
-                </>
+                <div className="flex items-center gap-2 text-sm text-neutral-400">
+                  <span>Loading...</span>
+                </div>
               )}
             </div>
 
