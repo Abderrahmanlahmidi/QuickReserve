@@ -1,14 +1,14 @@
 import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-    UseGuards,
-    Inject,
-    NotFoundException,
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Inject,
+  NotFoundException,
 } from '@nestjs/common';
 import { DRIZZLE } from '../db/drizzle.module';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -22,69 +22,69 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('categories')
 export class CategoriesController {
-    constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) { }
+  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) {}
 
-    @Post()
-    @UseGuards(AuthGuard, RolesGuard)
-    @Roles('ADMIN')
-    async create(@Body() createCategoryDto: CreateCategoryDto) {
-        const [category] = await this.db
-            .insert(schema.categories)
-            .values(createCategoryDto)
-            .returning();
-        return category;
+  @Post()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async create(@Body() createCategoryDto: CreateCategoryDto) {
+    const [category] = await this.db
+      .insert(schema.categories)
+      .values(createCategoryDto)
+      .returning();
+    return category;
+  }
+
+  @Get()
+  async findAll() {
+    return await this.db.select().from(schema.categories);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const [category] = await this.db
+      .select()
+      .from(schema.categories)
+      .where(eq(schema.categories.id, id))
+      .limit(1);
+
+    if (!category) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
     }
+    return category;
+  }
 
-    @Get()
-    async findAll() {
-        return await this.db.select().from(schema.categories);
+  @Patch(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
+    const [category] = await this.db
+      .update(schema.categories)
+      .set(updateCategoryDto)
+      .where(eq(schema.categories.id, id))
+      .returning();
+
+    if (!category) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
     }
+    return category;
+  }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string) {
-        const [category] = await this.db
-            .select()
-            .from(schema.categories)
-            .where(eq(schema.categories.id, id))
-            .limit(1);
+  @Delete(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async remove(@Param('id') id: string) {
+    const [category] = await this.db
+      .delete(schema.categories)
+      .where(eq(schema.categories.id, id))
+      .returning();
 
-        if (!category) {
-            throw new NotFoundException(`Category with ID ${id} not found`);
-        }
-        return category;
+    if (!category) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
     }
-
-    @Patch(':id')
-    @UseGuards(AuthGuard, RolesGuard)
-    @Roles('ADMIN')
-    async update(
-        @Param('id') id: string,
-        @Body() updateCategoryDto: UpdateCategoryDto,
-    ) {
-        const [category] = await this.db
-            .update(schema.categories)
-            .set(updateCategoryDto)
-            .where(eq(schema.categories.id, id))
-            .returning();
-
-        if (!category) {
-            throw new NotFoundException(`Category with ID ${id} not found`);
-        }
-        return category;
-    }
-
-    @Delete(':id')
-    @UseGuards(AuthGuard, RolesGuard)
-    @Roles('ADMIN')
-    async remove(@Param('id') id: string) {
-        const [category] = await this.db
-            .delete(schema.categories)
-            .where(eq(schema.categories.id, id))
-            .returning();
-
-        if (!category) {
-            throw new NotFoundException(`Category with ID ${id} not found`);
-        }
-        return { message: 'Category deleted successfully' };
-    }
+    return { message: 'Category deleted successfully' };
+  }
 }

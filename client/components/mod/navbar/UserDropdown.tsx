@@ -86,6 +86,14 @@ export default function UserDropdown({
                                         <ChevronDown size={18} className="text-neutral-400 group-hover:text-primary transition-colors rotate-90" />
                                         <span>Manage Categories</span>
                                     </Link>
+                                    <Link
+                                        href="/manage-reservations"
+                                        className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-600 rounded-xl hover:bg-neutral-50 hover:text-neutral-900 transition-all duration-200 group"
+                                        onClick={() => setIsProfileOpen(false)}
+                                    >
+                                        <ChevronDown size={18} className="text-neutral-400 group-hover:text-primary transition-colors rotate-90" />
+                                        <span>Manage Reservations</span>
+                                    </Link>
                                 </>
                             )}
                         </div>
