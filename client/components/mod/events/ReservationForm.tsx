@@ -95,7 +95,7 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
                     You are the organizer of this event. You cannot create a reservation for your own event.
                 </p>
                 <button
-                    onClick={() => router.push('/my-events')}
+                    onClick={() => router.push('/manage-events')}
                     className="w-full py-3 bg-white border border-neutral-200 text-neutral-900 font-semibold rounded-xl hover:bg-neutral-50 transition-all font-medium"
                 >
                     Manage Event
@@ -122,10 +122,10 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
                 </p>
                 <div className="pt-2">
                     <button
-                        onClick={() => router.push('/my-events')} // This is where personal reservations usually are
+                        onClick={() => router.push('/my-bookings')}
                         className="w-full py-3 bg-white border border-neutral-200 text-neutral-900 font-semibold rounded-xl hover:bg-neutral-50 transition-all font-medium shadow-sm active:scale-95 transition-transform"
                     >
-                        View My Reservations
+                        View My Bookings
                     </button>
                 </div>
             </div>

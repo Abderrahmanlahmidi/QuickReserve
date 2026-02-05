@@ -68,15 +68,26 @@ export default function UserDropdown({
                             <p className="text-xs text-neutral-500 truncate mt-0.5">{user.email}</p>
                         </div>
                         <div className="p-2 space-y-0.5">
+                            <Link
+                                href="/my-bookings"
+                                className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-600 rounded-xl hover:bg-neutral-50 hover:text-neutral-900 transition-all duration-200 group"
+                                onClick={() => setIsProfileOpen(false)}
+                            >
+                                <ChevronDown size={18} className="text-neutral-400 group-hover:text-primary transition-colors rotate-90" />
+                                <span>My Bookings</span>
+                            </Link>
+
                             {user.role === 'ADMIN' && (
                                 <>
+                                    <div className="mx-3 my-2 border-t border-neutral-100" />
+                                    <p className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-neutral-400">Host Dashboard</p>
                                     <Link
-                                        href="/my-events"
+                                        href="/manage-events"
                                         className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-600 rounded-xl hover:bg-neutral-50 hover:text-neutral-900 transition-all duration-200 group"
                                         onClick={() => setIsProfileOpen(false)}
                                     >
                                         <ChevronDown size={18} className="text-neutral-400 group-hover:text-primary transition-colors rotate-90" />
-                                        <span>My Events</span>
+                                        <span>Manage Events</span>
                                     </Link>
                                     <Link
                                         href="/manage-categories"

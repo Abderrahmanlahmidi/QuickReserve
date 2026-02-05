@@ -8,6 +8,7 @@ import {
     LogOut,
     LayoutDashboard,
     User,
+    Calendar,
 } from "lucide-react";
 
 interface MobileMenuProps {
@@ -143,25 +144,48 @@ export default function MobileMenu({
                                         </div>
 
                                         <Link
-                                            href="/dashboard"
+                                            href="/my-bookings"
                                             className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
                                             onClick={() => setIsOpen(false)}
                                         >
-                                            <LayoutDashboard size={22} />
-                                            <span>Dashboard</span>
+                                            <Calendar size={22} className="text-primary" />
+                                            <span>My Bookings</span>
                                         </Link>
-                                        <Link
-                                            href="/profile"
-                                            className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            <User size={22} />
-                                            <span>Profile</span>
-                                        </Link>
+
+                                        {user.role === 'ADMIN' && (
+                                            <>
+                                                <div className="mx-5 my-2 border-t border-neutral-100" />
+                                                <p className="px-5 py-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">Host Dashboard</p>
+                                                <Link
+                                                    href="/manage-events"
+                                                    className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    <LayoutDashboard size={22} />
+                                                    <span>Manage Events</span>
+                                                </Link>
+                                                <Link
+                                                    href="/manage-categories"
+                                                    className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    <LayoutDashboard size={22} />
+                                                    <span>Manage Categories</span>
+                                                </Link>
+                                                <Link
+                                                    href="/manage-reservations"
+                                                    className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    <LayoutDashboard size={22} />
+                                                    <span>Manage Reservations</span>
+                                                </Link>
+                                            </>
+                                        )}
 
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full flex items-center space-x-4 px-5 py-4 text-danger font-medium rounded-2xl hover:bg-danger/5 transition-colors"
+                                            className="w-full flex items-center space-x-4 px-5 py-4 text-danger font-medium rounded-2xl hover:bg-danger/5 transition-colors pt-6 mt-6 border-t border-neutral-100"
                                         >
                                             <LogOut size={22} />
                                             <span>Sign Out</span>
