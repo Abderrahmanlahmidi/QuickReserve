@@ -77,14 +77,14 @@ export default function EventList({ initialEvents, categories }: EventListProps)
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-8 rounded-[32px] border border-neutral-200 shadow-sm gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-8 rounded-[32px] border border-neutral-200 gap-4">
                 <div>
                     <h2 className="text-3xl font-black text-neutral-900 tracking-tight">Event Management</h2>
                     <p className="text-neutral-500 mt-1">Design, launch, and monitor your hosted experiences</p>
                 </div>
                 <button
                     onClick={handleCreate}
-                    className="flex items-center space-x-2 px-6 py-3.5 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-all active:scale-95 shadow-lg shadow-primary/20"
+                    className="flex items-center space-x-2 px-6 py-3.5 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover transition-colors"
                 >
                     <Plus size={20} />
                     <span>Create New Event</span>
@@ -110,7 +110,7 @@ export default function EventList({ initialEvents, categories }: EventListProps)
                     events.map((event) => (
                         <div
                             key={event.id}
-                            className="group relative flex flex-col sm:flex-row items-center justify-between p-6 bg-white border border-neutral-200 rounded-[32px] hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
+                            className="group relative flex flex-col sm:flex-row items-center justify-between p-6 bg-white border border-neutral-200 rounded-[32px] hover:border-primary/30 transition-colors"
                         >
                             <div className="flex flex-col sm:flex-row items-center flex-1 space-y-4 sm:space-y-0 sm:space-x-6 w-full sm:w-auto">
                                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex flex-col items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">

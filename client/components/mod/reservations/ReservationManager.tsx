@@ -2,7 +2,7 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
-import { Check, X, Clock, User, Calendar, AlertCircle, Loader2 } from "lucide-react";
+import { User, Calendar, AlertCircle, Loader2 } from "lucide-react";
 import Alert from "../atoms/Alert";
 import Modal from "../atoms/Modal";
 import { useState } from "react";

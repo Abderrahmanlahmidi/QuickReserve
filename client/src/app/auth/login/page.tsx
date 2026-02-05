@@ -3,24 +3,47 @@ import LoginForm from "../../../../components/mod/login/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[128px] opacity-20" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neutral-100 rounded-full blur-[128px] opacity-20" />
-      </div>
+    <div className="min-h-screen bg-neutral-50">
+      <div className="mx-auto flex w-full max-w-6xl items-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <section className="rounded-[32px] border border-neutral-200 bg-white p-8 md:p-10">
+            <div className="inline-flex items-center gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+              <Calendar className="h-5 w-5 text-primary" />
+              <span className="text-sm font-semibold text-neutral-600">QuickReserve</span>
+            </div>
+            <h1 className="mt-6 text-3xl font-black text-neutral-900 md:text-4xl">
+              Professional booking management
+            </h1>
+            <p className="mt-4 text-base text-neutral-600">
+              Keep reservations organized, teams aligned, and guests informed with a platform designed for clarity.
+            </p>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {[
+                "Unified event dashboard",
+                "Automated confirmations",
+                "Clear capacity tracking",
+                "Audit-ready reports",
+              ].map((item) => (
+                <div key={item} className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-semibold text-neutral-700">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </section>
 
-      <div className="w-full max-w-md relative z-10 space-y-8">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl border border-neutral-200 mb-4">
-            <Calendar className="w-8 h-8 text-primary" />
+          <div className="rounded-[32px] border border-neutral-200 bg-white p-8">
+            <div className="space-y-2 text-center">
+              <div className="mx-auto inline-flex items-center justify-center rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
+                <Calendar className="h-6 w-6 text-primary" />
+              </div>
+              <h2 className="text-3xl font-black text-neutral-900 tracking-tight">Welcome Back</h2>
+              <p className="text-neutral-500">Sign in to manage your bookings</p>
+            </div>
+            <div className="mt-8">
+              <LoginForm />
+            </div>
           </div>
-          <h1 className="text-3xl font-black text-neutral-900 tracking-tight">Welcome Back</h1>
-          <p className="text-neutral-500">Sign in to manage your bookings</p>
         </div>
-
-        <LoginForm />
-
       </div>
     </div>
   );
