@@ -23,12 +23,12 @@ export default function DeleteConfirmModal({
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={title}>
             <div className="space-y-6">
-                <div className="flex items-center space-x-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                    <div className="p-2 bg-red-500/20 rounded-full text-red-500">
+                <div className="flex items-center space-x-4 p-4 bg-danger/5 border border-danger/10 rounded-2xl">
+                    <div className="p-2 bg-danger/10 rounded-full text-danger">
                         <AlertTriangle size={24} />
                     </div>
-                    <p className="text-neutral-300 text-sm">
-                        Are you sure you want to delete <span className="text-white font-semibold">{itemTitle || "this event"}</span>?
+                    <p className="text-neutral-600 text-sm leading-relaxed">
+                        Are you sure you want to delete <span className="text-neutral-900 font-bold">{itemTitle || "this event"}</span>?
                         This action cannot be undone and all reservations for this event will be canceled.
                     </p>
                 </div>
@@ -37,14 +37,14 @@ export default function DeleteConfirmModal({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-6 py-2.5 rounded-xl border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 transition-all"
+                        className="px-6 py-2.5 rounded-xl border border-neutral-200 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-all font-medium"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={onConfirm}
                         disabled={isLoading}
-                        className="px-6 py-2.5 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-red-500/20"
+                        className="px-6 py-2.5 rounded-xl bg-danger text-white font-semibold hover:bg-danger-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     >
                         {isLoading ? "Deleting..." : "Delete Event"}
                     </button>

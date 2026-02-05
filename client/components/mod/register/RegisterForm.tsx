@@ -62,7 +62,7 @@ export default function RegisterForm() {
     };
 
     return (
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl p-8 sm:p-10">
+        <div className="bg-white rounded-3xl border border-neutral-200 p-8 sm:p-10">
             {/* Header removed */}
 
             {/* Success Alert */}
@@ -176,9 +176,9 @@ export default function RegisterForm() {
 
                 {/* Password Strength Indicator */}
                 {password && (
-                    <div className="p-4 bg-neutral-900/50 rounded-lg border border-neutral-700">
+                    <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-neutral-200">
+                            <span className="text-sm font-medium text-neutral-700">
                                 Password Strength
                             </span>
                             <Shield size={16} className="text-primary" />
@@ -189,7 +189,7 @@ export default function RegisterForm() {
                                     key={level}
                                     className={`h-1 flex-1 rounded-full ${password.length >= level * 2
                                         ? "bg-success"
-                                        : "bg-neutral-700"
+                                        : "bg-neutral-200"
                                         }`}
                                 />
                             ))}
@@ -224,8 +224,8 @@ export default function RegisterForm() {
                 </div>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-white/10 text-center">
-                <p className="text-neutral-400 text-sm">
+            <div className="mt-8 pt-6 border-t border-neutral-100 text-center">
+                <p className="text-neutral-500 text-sm">
                     Already have an account?{" "}
                     <Link href="/auth/login" className="text-primary font-semibold hover:text-primary-hover transition-colors">
                         Sign in instead

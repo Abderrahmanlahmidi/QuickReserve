@@ -67,14 +67,14 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-xl">
+            <div className="flex justify-between items-center bg-white p-6 rounded-3xl border border-neutral-200">
                 <div>
-                    <h2 className="text-2xl font-bold text-white">Category Management</h2>
-                    <p className="text-neutral-400 text-sm mt-1">Manage categories for your platform</p>
+                    <h2 className="text-2xl font-black text-neutral-900">Category Management</h2>
+                    <p className="text-neutral-500 text-sm mt-1">Manage categories for your platform</p>
                 </div>
                 <button
                     onClick={handleCreate}
-                    className="flex items-center space-x-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
+                    className="flex items-center space-x-2 px-5 py-2.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-hover transition-all"
                 >
                     <Plus size={20} />
                     <span>New Category</span>
@@ -83,37 +83,37 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categories.length === 0 ? (
-                    <div className="col-span-full text-center py-20 bg-white/5 border border-dashed border-white/10 rounded-3xl">
-                        <Tag size={48} className="mx-auto text-neutral-600 mb-4" />
-                        <h3 className="text-lg font-medium text-white">No categories found</h3>
-                        <p className="text-neutral-400 mt-1">Get started by creating your first category</p>
+                    <div className="col-span-full text-center py-20 bg-neutral-50 border border-dashed border-neutral-200 rounded-3xl">
+                        <Tag size={48} className="mx-auto text-neutral-300 mb-4" />
+                        <h3 className="text-lg font-bold text-neutral-900">No categories found</h3>
+                        <p className="text-neutral-500 mt-1">Get started by creating your first category</p>
                     </div>
                 ) : (
                     categories.map((category) => (
                         <div
                             key={category.id}
-                            className="group flex flex-col p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/[0.08] transition-all duration-300"
+                            className="group flex flex-col p-6 bg-white border border-neutral-200 rounded-3xl hover:border-primary/20 transition-all duration-300"
                         >
                             <div className="flex items-center justify-between mb-2">
-                                <div className="p-2 bg-primary/10 rounded-lg">
+                                <div className="p-2 bg-primary/5 rounded-lg">
                                     <Tag size={20} className="text-primary" />
                                 </div>
                                 <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <button
                                         onClick={() => handleEdit(category)}
-                                        className="p-2 text-neutral-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                                        className="p-2 text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-all"
                                     >
                                         <Edit2 size={16} />
                                     </button>
                                     <button
                                         onClick={() => handleDeleteClick(category)}
-                                        className="p-2 text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                                        className="p-2 text-danger/60 hover:text-danger hover:bg-danger/5 rounded-lg transition-all"
                                     >
                                         <Trash2 size={16} />
                                     </button>
                                 </div>
                             </div>
-                            <h3 className="text-lg font-bold text-white truncate">{category.name}</h3>
+                            <h3 className="text-lg font-bold text-neutral-900 truncate">{category.name}</h3>
                         </div>
                     ))
                 )}
