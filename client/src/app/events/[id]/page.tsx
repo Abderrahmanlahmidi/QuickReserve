@@ -119,7 +119,11 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
                     {/* Right Column: Reservation Sidebar */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-32 space-y-6">
-                            <ReservationForm eventId={event.id} capacity={event.capacity} />
+                            <ReservationForm
+                                eventId={event.id}
+                                capacity={event.capacity}
+                                creatorId={event.createdBy}
+                            />
 
                             <div className="p-6 bg-neutral-50 rounded-3xl border border-neutral-100 border-dashed">
                                 <h4 className="text-sm font-bold text-neutral-900 mb-2">Organizer Contact</h4>

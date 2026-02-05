@@ -22,7 +22,6 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
 
     return (
         <div className="space-y-8">
-            {/* Search & Filter Header */}
             <div className="flex flex-col md:flex-row gap-4 bg-white p-6 rounded-3xl border border-neutral-200">
                 <div className="relative flex-1">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
