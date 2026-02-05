@@ -9,3 +9,15 @@ export async function getEvents() {
         return [];
     }
 }
+
+export async function getEventById(id: string) {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/events/${id}`, {
+            cache: 'no-store'
+        });
+        if (!response.ok) return null;
+        return response.json();
+    } catch (e) {
+        return null;
+    }
+}

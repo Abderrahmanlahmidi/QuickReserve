@@ -5,9 +5,10 @@ import { UsersModule } from './users/users.module';
 import { DrizzleModule } from './db/drizzle.module';
 import { EventsModule } from './events/events.module';
 import { CategoriesController } from './categories/categories.controller';
+import { ReservationsModule } from './reservations/reservations.module';
 
 @Module({
-  imports: [UsersModule, DrizzleModule, EventsModule],
+  imports: [UsersModule, DrizzleModule, EventsModule, ReservationsModule],
   controllers: [AppController, CategoriesController],
   providers: [AppService],
 })
