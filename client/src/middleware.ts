@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
     }
 
     if (token && user) {
-        if (pathname.startsWith('/my-events')) {
+        if (pathname.startsWith('/my-events') || pathname.startsWith('/dashboard')) {
             if (user.role !== 'ADMIN') {
                 return NextResponse.redirect(new URL('/', request.url))
             }
