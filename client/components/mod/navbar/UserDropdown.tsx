@@ -6,6 +6,7 @@ import {
     LogOut,
     ChevronDown,
     AlertCircle,
+    LayoutDashboard,
 } from "lucide-react";
 import Modal from "../atoms/Modal";
 
@@ -81,6 +82,14 @@ export default function UserDropdown({
                                 <>
                                     <div className="mx-3 my-2 border-t border-neutral-100" />
                                     <p className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-neutral-400">Host Dashboard</p>
+                                    <Link
+                                        href="/dashboard"
+                                        className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-600 rounded-xl hover:bg-neutral-50 hover:text-neutral-900 transition-all duration-200 group"
+                                        onClick={() => setIsProfileOpen(false)}
+                                    >
+                                        <LayoutDashboard size={18} className="text-neutral-400 group-hover:text-primary transition-colors" />
+                                        <span>Dashboard</span>
+                                    </Link>
                                     <Link
                                         href="/manage-events"
                                         className="flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-neutral-600 rounded-xl hover:bg-neutral-50 hover:text-neutral-900 transition-all duration-200 group"

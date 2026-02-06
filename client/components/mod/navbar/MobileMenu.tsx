@@ -157,6 +157,14 @@ export default function MobileMenu({
                                                 <div className="mx-5 my-2 border-t border-neutral-100" />
                                                 <p className="px-5 py-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">Host Dashboard</p>
                                                 <Link
+                                                    href="/dashboard"
+                                                    className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    <LayoutDashboard size={22} />
+                                                    <span>Dashboard</span>
+                                                </Link>
+                                                <Link
                                                     href="/manage-events"
                                                     className="flex items-center space-x-4 px-5 py-4 text-neutral-600 font-medium rounded-2xl hover:text-neutral-900 hover:bg-neutral-50 transition-colors"
                                                     onClick={() => setIsOpen(false)}
