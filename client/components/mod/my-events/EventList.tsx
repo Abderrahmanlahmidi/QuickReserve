@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Edit2, Trash2, Calendar, MapPin, Users, Plus, Loader2 } from "lucide-react";
 import EventFormOverlay from "./EventFormOverlay";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
+import Pagination from "../atoms/Pagination";
 
 interface Event {
     id: string;
@@ -27,12 +28,27 @@ export default function EventList({ initialEvents, categories }: EventListProps)
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const queryClient = useQueryClient();
+    const pageSize = 5;
 
     // Sync state when props change (fixes reactivity issue)
     useEffect(() => {
         setEvents(initialEvents);
     }, [initialEvents]);
+
+    const totalPages = Math.max(1, Math.ceil(events.length / pageSize));
+
+    const pagedEvents = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return events.slice(start, start + pageSize);
+    }, [events, currentPage]);
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
 
     const eventMutation = useMutation({
         mutationFn: async (data: any) => {
@@ -107,7 +123,7 @@ export default function EventList({ initialEvents, categories }: EventListProps)
                         </button>
                     </div>
                 ) : (
-                    events.map((event) => (
+                    pagedEvents.map((event) => (
                         <div
                             key={event.id}
                             className="group relative flex flex-col sm:flex-row items-center justify-between p-6 bg-white border border-neutral-200 rounded-[32px] hover:border-primary/30 transition-colors"
@@ -177,6 +193,14 @@ export default function EventList({ initialEvents, categories }: EventListProps)
                     ))
                 )}
             </div>
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
 
             <EventFormOverlay
                 isOpen={isFormOpen}

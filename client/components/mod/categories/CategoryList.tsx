@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Edit2, Trash2, Plus, Tag } from "lucide-react";
 import CategoryFormOverlay from "./CategoryFormOverlay";
 import DeleteConfirmModal from "../my-events/DeleteConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
+import Pagination from "../atoms/Pagination";
 
 interface Category {
     id: string;
@@ -20,7 +21,22 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
     const queryClient = useQueryClient();
+    const pageSize = 9;
+
+    const totalPages = Math.max(1, Math.ceil(categories.length / pageSize));
+
+    const pagedCategories = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return categories.slice(start, start + pageSize);
+    }, [categories, currentPage]);
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
 
     // Create/Update Mutation
     const categoryMutation = useMutation({
@@ -89,7 +105,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
                         <p className="text-neutral-500 mt-1">Get started by creating your first category</p>
                     </div>
                 ) : (
-                    categories.map((category) => (
+                    pagedCategories.map((category) => (
                         <div
                             key={category.id}
                             className="group flex flex-col p-6 bg-white border border-neutral-200 rounded-3xl hover:border-primary/20 transition-all duration-300"
@@ -118,6 +134,14 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
                     ))
                 )}
             </div>
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
 
             <CategoryFormOverlay
                 isOpen={isFormOpen}

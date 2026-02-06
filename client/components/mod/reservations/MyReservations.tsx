@@ -1,18 +1,27 @@
 "use client";
-import React from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
-import { Calendar, MapPin, Clock, Tag, ExternalLink, Loader2 } from "lucide-react";
+import { Calendar, MapPin, Clock, Tag, ExternalLink, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Alert from "../atoms/Alert";
+import Pagination from "../atoms/Pagination";
+import { downloadReservationTicket } from "../../../utils/pdf";
 
 export default function MyReservations() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 6;
     const { data: reservations, isLoading, isError } = useQuery({
         queryKey: ["my-reservations"],
         queryFn: async () => {
             const response = await axiosClient.get("/reservations/my-reservations");
             return response.data;
         },
+        staleTime: 0,
+        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        refetchInterval: 10000,
+        refetchIntervalInBackground: true,
     });
 
     const getStatusStyle = (status: string) => {
@@ -25,6 +34,19 @@ export default function MyReservations() {
                 return "bg-warning/10 text-warning border-warning/20";
         }
     };
+
+    const totalPages = Math.max(1, Math.ceil((reservations?.length || 0) / pageSize));
+
+    const pagedReservations = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return (reservations || []).slice(start, start + pageSize);
+    }, [reservations, currentPage]);
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
 
     if (isLoading) {
         return (
@@ -41,9 +63,18 @@ export default function MyReservations() {
 
     return (
         <div className="space-y-8">
-            <div>
-                <h2 className="text-3xl font-black text-neutral-900 tracking-tight">My Bookings</h2>
-                <p className="text-neutral-500 mt-1">Track your event reservations and status</p>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 className="text-3xl font-black text-neutral-900 tracking-tight">My Bookings</h2>
+                    <p className="text-neutral-500 mt-1">Track your event reservations and status</p>
+                </div>
+                <Link
+                    href="/"
+                    className="inline-flex items-center space-x-2 text-neutral-600 hover:text-neutral-900 transition-colors font-medium group"
+                >
+                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Back to home page</span>
+                </Link>
             </div>
 
             {reservations?.length === 0 ? (
@@ -62,7 +93,7 @@ export default function MyReservations() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {reservations?.map((res: any) => (
+                    {pagedReservations.map((res: any) => (
                         <div
                             key={res.id}
                             className="group bg-white border border-neutral-200 rounded-[32px] overflow-hidden hover:border-primary/30 transition-colors flex flex-col"
@@ -113,10 +144,26 @@ export default function MyReservations() {
                                         <span className="text-[10px] font-bold uppercase">Awaiting Admin</span>
                                     </div>
                                 )}
+                                {res.status === 'CONFIRMED' && (
+                                    <button
+                                        onClick={() => downloadReservationTicket(res)}
+                                        className="px-3 py-1.5 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-full hover:bg-primary-hover transition-colors"
+                                    >
+                                        Download Ticket
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
                 </div>
+            )}
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
             )}
         </div>
     );
