@@ -6,6 +6,7 @@ import { Calendar, MapPin, Clock, Tag, ExternalLink, Loader2, ArrowLeft } from "
 import Link from "next/link";
 import Alert from "../atoms/Alert";
 import Pagination from "../atoms/Pagination";
+import { downloadReservationTicket } from "../../../utils/pdf";
 
 export default function MyReservations() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -142,6 +143,14 @@ export default function MyReservations() {
                                         <Clock size={12} />
                                         <span className="text-[10px] font-bold uppercase">Awaiting Admin</span>
                                     </div>
+                                )}
+                                {res.status === 'CONFIRMED' && (
+                                    <button
+                                        onClick={() => downloadReservationTicket(res)}
+                                        className="px-3 py-1.5 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-full hover:bg-primary-hover transition-colors"
+                                    >
+                                        Download Ticket
+                                    </button>
                                 )}
                             </div>
                         </div>
