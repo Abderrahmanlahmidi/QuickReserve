@@ -1,16 +1,19 @@
 "use client";
-import React from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
-import { User, Calendar, AlertCircle, Loader2 } from "lucide-react";
+import { User, Calendar, AlertCircle, Loader2, ArrowLeft } from "lucide-react";
 import Alert from "../atoms/Alert";
 import Modal from "../atoms/Modal";
-import { useState } from "react";
+import Link from "next/link";
+import Pagination from "../atoms/Pagination";
 
 export default function ReservationManager() {
     const queryClient = useQueryClient();
     const [selectedReservation, setSelectedReservation] = useState<any>(null);
     const [actionType, setActionType] = useState<'CONFIRM' | 'CANCELED' | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
 
     const { data: reservations, isLoading, isError } = useQuery({
         queryKey: ["all-reservations"],
@@ -18,6 +21,11 @@ export default function ReservationManager() {
             const response = await axiosClient.get("/reservations");
             return response.data;
         },
+        staleTime: 0,
+        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        refetchInterval: 10000,
+        refetchIntervalInBackground: true,
     });
 
     const mutation = useMutation({
@@ -42,6 +50,19 @@ export default function ReservationManager() {
         }
     };
 
+    const totalPages = Math.max(1, Math.ceil((reservations?.length || 0) / pageSize));
+
+    const pagedReservations = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return (reservations || []).slice(start, start + pageSize);
+    }, [reservations, currentPage]);
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
@@ -53,11 +74,18 @@ export default function ReservationManager() {
 
     return (
         <div className="space-y-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 className="text-3xl font-black text-neutral-900 tracking-tight">Manage Reservations</h2>
                     <p className="text-neutral-500 mt-1">Approve or decline event booking requests</p>
                 </div>
+                <Link
+                    href="/"
+                    className="inline-flex items-center space-x-2 text-neutral-600 hover:text-neutral-900 transition-colors font-medium group"
+                >
+                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Back to home page</span>
+                </Link>
             </div>
 
             {isError && (
@@ -83,7 +111,7 @@ export default function ReservationManager() {
                                     </td>
                                 </tr>
                             ) : (
-                                reservations?.map((res: any, index: number) => (
+                                pagedReservations.map((res: any, index: number) => (
                                     <tr key={res?.id || index} className="hover:bg-neutral-50/50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-3">
@@ -136,6 +164,14 @@ export default function ReservationManager() {
                     </table>
                 </div>
             </div>
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
 
             <Modal
                 isOpen={!!selectedReservation && !!actionType}

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import axiosClient from "../../../lib/axios-client";
@@ -15,6 +15,7 @@ interface ReservationFormProps {
 
 export default function ReservationForm({ eventId, capacity, creatorId }: ReservationFormProps) {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const [user, setUser] = useState<any>(null);
     const [isAlreadyReserved, setIsAlreadyReserved] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -38,6 +39,11 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
             return response.data;
         },
         enabled: !!user,
+        staleTime: 0,
+        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        refetchInterval: 10000,
+        refetchIntervalInBackground: true,
     });
 
     useEffect(() => {
@@ -59,6 +65,7 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
         onSuccess: (response: any) => {
             setIsAlreadyReserved(true);
             setStatus(response.data.status);
+            queryClient.invalidateQueries({ queryKey: ["my-reservations"] });
             router.refresh();
         },
     });

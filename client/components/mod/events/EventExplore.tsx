@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, Filter, Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { EventExploreProps } from "../../../types/events";
+import Pagination from "../atoms/Pagination";
 
 
 
@@ -10,6 +11,8 @@ import { EventExploreProps } from "../../../types/events";
 export default function EventExplore({ initialEvents, categories }: EventExploreProps) {
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 9;
 
     const filteredEvents = useMemo(() => {
         return initialEvents.filter((event) => {
@@ -19,6 +22,23 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
             return matchesSearch && matchesCategory;
         });
     }, [initialEvents, search, selectedCategory]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredEvents.length / pageSize));
+
+    const pagedEvents = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return filteredEvents.slice(start, start + pageSize);
+    }, [filteredEvents, currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, selectedCategory]);
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
 
     return (
         <div className="space-y-8">
@@ -59,7 +79,7 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
                         <p className="text-neutral-500 mt-2">Try adjusting your search or filters</p>
                     </div>
                 ) : (
-                    filteredEvents.map((event) => (
+                    pagedEvents.map((event) => (
                         <Link
                             href={`/events/${event.id}`}
                             key={event.id}
@@ -110,6 +130,14 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
                     ))
                 )}
             </div>
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                />
+            )}
         </div>
     );
 }
