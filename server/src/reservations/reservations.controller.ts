@@ -17,7 +17,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 @Controller('reservations')
 @UseGuards(AuthGuard, RolesGuard)
 export class ReservationsController {
-  constructor(private readonly reservationsService: ReservationsService) { }
+  constructor(private readonly reservationsService: ReservationsService) {}
 
   @Post()
   create(

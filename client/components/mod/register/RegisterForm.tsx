@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export default function RegisterForm() {
     const {
         register,
         handleSubmit,
-        watch,
+        control,
         formState: { errors },
     } = useForm<RegisterFormData>({
         mode: "onBlur",
@@ -54,7 +54,7 @@ export default function RegisterForm() {
         },
     });
 
-    const password = watch("password");
+    const password = useWatch({ control, name: "password" });
 
     const onSubmit = async (data: RegisterFormData) => {
         setServerError(null);

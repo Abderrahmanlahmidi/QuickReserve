@@ -20,12 +20,18 @@ import MobileMenu from "./mod/navbar/MobileMenu";
 type Props = Record<string, never>;
 
 export default function Navbar({ }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const pathname = usePathname() || "/";
+  const [menuState, setMenuState] = useState<{ open: boolean; path: string }>(() => ({
+    open: false,
+    path: pathname,
+  }));
+  const [profileState, setProfileState] = useState<{ open: boolean; path: string }>(() => ({
+    open: false,
+    path: pathname,
+  }));
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<{ firstName: string; lastName?: string; email: string; role: string } | null>(null);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
-  const pathname = usePathname();
   const router = useRouter();
 
 
@@ -60,10 +66,16 @@ export default function Navbar({ }: Props) {
     };
   }, []);
 
-  useEffect(() => {
-    setIsOpen(false);
-    setIsProfileOpen(false);
-  }, [pathname]);
+  const isOpen = menuState.open && menuState.path === pathname;
+  const isProfileOpen = profileState.open && profileState.path === pathname;
+
+  const setIsOpen = (open: boolean) => {
+    setMenuState({ open, path: pathname });
+  };
+
+  const setIsProfileOpen = (open: boolean) => {
+    setProfileState({ open, path: pathname });
+  };
 
   const handleLogout = () => {
     Cookies.remove("access_token", { path: '/' });
