@@ -15,8 +15,8 @@ type ReservationUser = {
 type ReservationTicket = {
   id?: string;
   status?: string;
-  event?: ReservationEvent;
-  user?: ReservationUser;
+  event?: ReservationEvent | null;
+  user?: ReservationUser | null;
 };
 
 function formatDate(value?: string | Date) {
