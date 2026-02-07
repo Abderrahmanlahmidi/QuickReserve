@@ -5,7 +5,7 @@ export async function getEvents() {
         });
         if (!response.ok) return [];
         return response.json();
-    } catch (e) {
+    } catch {
         return [];
     }
 }
@@ -17,7 +17,7 @@ export async function getEventById(id: string) {
         });
         if (!response.ok) return null;
         return response.json();
-    } catch (e) {
+    } catch {
         return null;
     }
 }

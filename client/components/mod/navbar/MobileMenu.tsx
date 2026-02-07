@@ -7,7 +7,6 @@ import {
     UserPlus,
     LogOut,
     LayoutDashboard,
-    User,
     Calendar,
 } from "lucide-react";
 

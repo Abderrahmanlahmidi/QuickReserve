@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
 import { Calendar, MapPin, Clock, Tag, ExternalLink, Loader2, ArrowLeft } from "lucide-react";
@@ -8,10 +8,26 @@ import Alert from "../atoms/Alert";
 import Pagination from "../atoms/Pagination";
 import { downloadReservationTicket } from "../../../utils/pdf";
 
+type ReservationStatus = "PENDING" | "CONFIRMED" | "CANCELED";
+
+type ReservationEvent = {
+    id: string;
+    title?: string;
+    description?: string;
+    date?: string;
+    location?: string;
+};
+
+type Reservation = {
+    id: string;
+    status: ReservationStatus;
+    event?: ReservationEvent | null;
+};
+
 export default function MyReservations() {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 6;
-    const { data: reservations, isLoading, isError } = useQuery({
+    const { data: reservations = [], isLoading, isError } = useQuery<Reservation[]>({
         queryKey: ["my-reservations"],
         queryFn: async () => {
             const response = await axiosClient.get("/reservations/my-reservations");
@@ -35,18 +51,14 @@ export default function MyReservations() {
         }
     };
 
-    const totalPages = Math.max(1, Math.ceil((reservations?.length || 0) / pageSize));
+    const totalPages = Math.max(1, Math.ceil(reservations.length / pageSize));
+
+    const safeCurrentPage = Math.min(currentPage, totalPages);
 
     const pagedReservations = useMemo(() => {
-        const start = (currentPage - 1) * pageSize;
-        return (reservations || []).slice(start, start + pageSize);
-    }, [reservations, currentPage]);
-
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        }
-    }, [currentPage, totalPages]);
+        const start = (safeCurrentPage - 1) * pageSize;
+        return reservations.slice(start, start + pageSize);
+    }, [reservations, safeCurrentPage]);
 
     if (isLoading) {
         return (
@@ -77,12 +89,12 @@ export default function MyReservations() {
                 </Link>
             </div>
 
-            {reservations?.length === 0 ? (
+            {reservations.length === 0 ? (
                 <div className="text-center py-20 bg-neutral-50 rounded-[40px] border border-neutral-100 border-dashed">
                     <Calendar className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
                     <h3 className="text-lg font-bold text-neutral-900">No bookings yet</h3>
                     <p className="text-neutral-500 mt-1 max-w-sm mx-auto">
-                        You haven't made any reservations. Explore our events and find something exciting!
+                        You haven&apos;t made any reservations. Explore our events and find something exciting!
                     </p>
                     <Link
                         href="/events"
@@ -93,7 +105,7 @@ export default function MyReservations() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {pagedReservations.map((res: any) => (
+                    {pagedReservations.map((res) => (
                         <div
                             key={res.id}
                             className="group bg-white border border-neutral-200 rounded-[32px] overflow-hidden hover:border-primary/30 transition-colors flex flex-col"
@@ -103,9 +115,15 @@ export default function MyReservations() {
                                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border ${getStatusStyle(res.status)}`}>
                                         {res.status}
                                     </span>
-                                    <Link href={`/events/${res.event.id}`} className="text-neutral-400 hover:text-primary transition-colors">
-                                        <ExternalLink size={18} />
-                                    </Link>
+                                    {res.event?.id ? (
+                                        <Link href={`/events/${res.event.id}`} className="text-neutral-400 hover:text-primary transition-colors">
+                                            <ExternalLink size={18} />
+                                        </Link>
+                                    ) : (
+                                        <span className="text-neutral-300">
+                                            <ExternalLink size={18} />
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div>
@@ -160,7 +178,7 @@ export default function MyReservations() {
 
             {totalPages > 1 && (
                 <Pagination
-                    currentPage={currentPage}
+                    currentPage={safeCurrentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />

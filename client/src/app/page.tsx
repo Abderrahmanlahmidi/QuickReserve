@@ -1,5 +1,6 @@
 import Hero from "../../components/mod/home/Hero";
 import Navbar from "../../components/Navbar";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -51,7 +52,7 @@ export default function Home() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400">Contact</p>
               <h2 className="mt-3 text-3xl font-black text-neutral-900 md:text-4xl">
-                Let’s plan your setup
+                Let&apos;s plan your setup
               </h2>
               <p className="mt-4 text-base text-neutral-600 md:text-lg">
                 Talk to our team about onboarding, migration, or enterprise requirements. We respond within one
@@ -92,8 +93,8 @@ export default function Home() {
 
               <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">Hours</p>
-                <p className="mt-3 text-sm font-semibold text-neutral-800">Monday – Friday</p>
-                <p className="text-sm text-neutral-600">8:00 AM – 6:00 PM (PT)</p>
+                <p className="mt-3 text-sm font-semibold text-neutral-800">Monday - Friday</p>
+                <p className="text-sm text-neutral-600">8:00 AM - 6:00 PM (PT)</p>
               </div>
 
               <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
@@ -123,14 +124,14 @@ export default function Home() {
               <p className="text-sm text-neutral-500">Professional event reservation platform.</p>
             </div>
             <div className="flex flex-wrap gap-4 text-sm font-semibold text-neutral-600">
-              <a href="#about" className="hover:text-primary">About</a>
-              <a href="#contact" className="hover:text-primary">Contact</a>
-              <a href="/events" className="hover:text-primary">Events</a>
-              <a href="/auth/login" className="hover:text-primary">Login</a>
+              <Link href="#about" className="hover:text-primary">About</Link>
+              <Link href="#contact" className="hover:text-primary">Contact</Link>
+              <Link href="/events" className="hover:text-primary">Events</Link>
+              <Link href="/auth/login" className="hover:text-primary">Login</Link>
             </div>
           </div>
           <div className="mt-6 text-xs text-neutral-400">
-            © {new Date().getFullYear()} QuickReserve. All rights reserved.
+            &copy; {new Date().getFullYear()} QuickReserve. All rights reserved.
           </div>
         </div>
       </footer>

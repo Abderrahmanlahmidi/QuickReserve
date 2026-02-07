@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
-import { Edit2, Trash2, Calendar, MapPin, Users, Plus, Loader2 } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { Edit2, Trash2, Calendar, MapPin, Users, Plus } from "lucide-react";
 import EventFormOverlay from "./EventFormOverlay";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -23,8 +23,18 @@ interface EventListProps {
     categories: { id: string; name: string }[];
 }
 
+type EventFormData = {
+    title: string;
+    description: string;
+    date: string;
+    location: string;
+    capacity: number;
+    status: string;
+    categoryId: string;
+};
+
 export default function EventList({ initialEvents, categories }: EventListProps) {
-    const [events, setEvents] = useState<Event[]>(initialEvents);
+    const events = initialEvents;
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -32,26 +42,17 @@ export default function EventList({ initialEvents, categories }: EventListProps)
     const queryClient = useQueryClient();
     const pageSize = 5;
 
-    // Sync state when props change (fixes reactivity issue)
-    useEffect(() => {
-        setEvents(initialEvents);
-    }, [initialEvents]);
-
     const totalPages = Math.max(1, Math.ceil(events.length / pageSize));
 
-    const pagedEvents = useMemo(() => {
-        const start = (currentPage - 1) * pageSize;
-        return events.slice(start, start + pageSize);
-    }, [events, currentPage]);
+    const safeCurrentPage = Math.min(currentPage, totalPages);
 
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        }
-    }, [currentPage, totalPages]);
+    const pagedEvents = useMemo(() => {
+        const start = (safeCurrentPage - 1) * pageSize;
+        return events.slice(start, start + pageSize);
+    }, [events, safeCurrentPage]);
 
     const eventMutation = useMutation({
-        mutationFn: async (data: any) => {
+        mutationFn: async (data: EventFormData) => {
             if (selectedEvent) {
                 return axiosClient.patch(`/events/${selectedEvent.id}`, data);
             }
@@ -196,7 +197,7 @@ export default function EventList({ initialEvents, categories }: EventListProps)
 
             {totalPages > 1 && (
                 <Pagination
-                    currentPage={currentPage}
+                    currentPage={safeCurrentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />
@@ -206,7 +207,19 @@ export default function EventList({ initialEvents, categories }: EventListProps)
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
                 onSubmit={(data) => eventMutation.mutate(data)}
-                initialData={selectedEvent}
+                initialData={
+                    selectedEvent
+                        ? {
+                            title: selectedEvent.title,
+                            description: selectedEvent.description,
+                            date: selectedEvent.date,
+                            location: selectedEvent.location,
+                            capacity: selectedEvent.capacity,
+                            status: selectedEvent.status,
+                            categoryId: selectedEvent.categoryId,
+                        }
+                        : undefined
+                }
                 categories={categories}
                 title={selectedEvent ? "Edit Event Details" : "Create New Event"}
                 isLoading={eventMutation.isPending}

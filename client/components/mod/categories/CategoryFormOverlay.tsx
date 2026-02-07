@@ -12,7 +12,7 @@ interface CategoryFormOverlayProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: CategoryFormData) => void;
-    initialData?: any;
+    initialData?: Partial<CategoryFormData> | null;
     title: string;
     isLoading?: boolean;
 }

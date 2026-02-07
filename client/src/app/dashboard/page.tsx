@@ -21,7 +21,7 @@ async function getEvents(token?: string): Promise<Event[]> {
         );
         if (!response.ok) return [];
         return response.json();
-    } catch (e) {
+    } catch {
         return [];
     }
 }
@@ -37,7 +37,7 @@ async function getReservations(token?: string): Promise<Reservation[]> {
         );
         if (!response.ok) return [];
         return response.json();
-    } catch (e) {
+    } catch {
         return [];
     }
 }

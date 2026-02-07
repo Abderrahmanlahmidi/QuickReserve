@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../../../lib/axios-client";
 import { User, Calendar, AlertCircle, Loader2, ArrowLeft } from "lucide-react";
@@ -8,14 +8,33 @@ import Modal from "../atoms/Modal";
 import Link from "next/link";
 import Pagination from "../atoms/Pagination";
 
+type ReservationStatus = "PENDING" | "CONFIRMED" | "CANCELED";
+
+type ReservationUser = {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+};
+
+type ReservationEvent = {
+    title?: string;
+};
+
+type Reservation = {
+    id: string;
+    status: ReservationStatus;
+    user?: ReservationUser;
+    event?: ReservationEvent;
+};
+
 export default function ReservationManager() {
     const queryClient = useQueryClient();
-    const [selectedReservation, setSelectedReservation] = useState<any>(null);
-    const [actionType, setActionType] = useState<'CONFIRM' | 'CANCELED' | null>(null);
+    const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+    const [actionType, setActionType] = useState<ReservationStatus | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
-    const { data: reservations, isLoading, isError } = useQuery({
+    const { data: reservations = [], isLoading, isError } = useQuery<Reservation[]>({
         queryKey: ["all-reservations"],
         queryFn: async () => {
             const response = await axiosClient.get("/reservations");
@@ -29,7 +48,7 @@ export default function ReservationManager() {
     });
 
     const mutation = useMutation({
-        mutationFn: async ({ id, status }: { id: string, status: string }) => {
+        mutationFn: async ({ id, status }: { id: string; status: ReservationStatus }) => {
             return axiosClient.patch(`/reservations/${id}/status`, { status });
         },
         onSuccess: () => {
@@ -39,7 +58,7 @@ export default function ReservationManager() {
         },
     });
 
-    const getStatusStyle = (status: string) => {
+    const getStatusStyle = (status: ReservationStatus) => {
         switch (status) {
             case "CONFIRMED":
                 return "bg-success/10 text-success border-success/20";
@@ -50,18 +69,14 @@ export default function ReservationManager() {
         }
     };
 
-    const totalPages = Math.max(1, Math.ceil((reservations?.length || 0) / pageSize));
+    const totalPages = Math.max(1, Math.ceil(reservations.length / pageSize));
+
+    const safeCurrentPage = Math.min(currentPage, totalPages);
 
     const pagedReservations = useMemo(() => {
-        const start = (currentPage - 1) * pageSize;
-        return (reservations || []).slice(start, start + pageSize);
-    }, [reservations, currentPage]);
-
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        }
-    }, [currentPage, totalPages]);
+        const start = (safeCurrentPage - 1) * pageSize;
+        return reservations.slice(start, start + pageSize);
+    }, [reservations, safeCurrentPage]);
 
     if (isLoading) {
         return (
@@ -104,15 +119,15 @@ export default function ReservationManager() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-neutral-100">
-                            {reservations?.length === 0 ? (
+                            {reservations.length === 0 ? (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-12 text-center text-neutral-500">
                                         No reservations found in the system.
                                     </td>
                                 </tr>
                             ) : (
-                                pagedReservations.map((res: any, index: number) => (
-                                    <tr key={res?.id || index} className="hover:bg-neutral-50/50 transition-colors">
+                                pagedReservations.map((res) => (
+                                    <tr key={res.id} className="hover:bg-neutral-50/50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-3">
                                                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -138,12 +153,12 @@ export default function ReservationManager() {
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end">
                                                 <select
-                                                    value={res?.status}
+                                                    value={res.status}
                                                     onChange={(e) => {
-                                                        const newStatus = e.target.value as any;
-                                                        if (newStatus !== res?.status) {
+                                                        const newStatus = e.target.value as ReservationStatus;
+                                                        if (newStatus !== res.status) {
                                                             setSelectedReservation(res);
-                                                            setActionType(newStatus === 'CONFIRMED' ? 'CONFIRM' : newStatus);
+                                                            setActionType(newStatus);
                                                         }
                                                     }}
                                                     className={`px-3 py-1.5 rounded-xl border text-[11px] font-black uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer ${res?.status === "CONFIRMED" ? "bg-success/5 border-success/20 text-success" :
@@ -167,7 +182,7 @@ export default function ReservationManager() {
 
             {totalPages > 1 && (
                 <Pagination
-                    currentPage={currentPage}
+                    currentPage={safeCurrentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />
@@ -179,14 +194,14 @@ export default function ReservationManager() {
                     setSelectedReservation(null);
                     setActionType(null);
                 }}
-                title={actionType === 'CONFIRM' || actionType === 'CONFIRMED' ? "Confirm Reservation" :
+                title={actionType === 'CONFIRMED' ? "Confirm Reservation" :
                     actionType === 'PENDING' ? "Reset to Pending" : "Decline Reservation"}
             >
                 <div className="space-y-6">
-                    <div className={`flex items-center space-x-4 p-4 rounded-2xl border ${(actionType === 'CONFIRM' || actionType === 'CONFIRMED') ? "bg-success/5 border-success/10" :
+                    <div className={`flex items-center space-x-4 p-4 rounded-2xl border ${(actionType === 'CONFIRMED') ? "bg-success/5 border-success/10" :
                             actionType === 'PENDING' ? "bg-warning/5 border-warning/10" : "bg-danger/5 border-danger/10"
                         }`}>
-                        <div className={`p-2 rounded-full ${(actionType === 'CONFIRM' || actionType === 'CONFIRMED') ? "bg-success/10 text-success" :
+                        <div className={`p-2 rounded-full ${(actionType === 'CONFIRMED') ? "bg-success/10 text-success" :
                                 actionType === 'PENDING' ? "bg-warning/10 text-warning" : "bg-danger/10 text-danger"
                             }`}>
                             <AlertCircle size={24} />
@@ -211,15 +226,15 @@ export default function ReservationManager() {
                         </button>
                         <button
                             onClick={() => {
-                                if (selectedReservation?.id) {
+                                if (selectedReservation?.id && actionType) {
                                     mutation.mutate({
                                         id: selectedReservation.id,
-                                        status: actionType === 'CONFIRM' ? 'CONFIRMED' : actionType as any
+                                        status: actionType,
                                     });
                                 }
                             }}
                             disabled={mutation.isPending || !selectedReservation?.id}
-                            className={`px-6 py-2.5 rounded-xl text-white font-semibold transition-all disabled:opacity-50 flex items-center space-x-2 ${(actionType === 'CONFIRM' || actionType === 'CONFIRMED') ? "bg-success hover:bg-success/90" :
+                            className={`px-6 py-2.5 rounded-xl text-white font-semibold transition-all disabled:opacity-50 flex items-center space-x-2 ${(actionType === 'CONFIRMED') ? "bg-success hover:bg-success/90" :
                                     actionType === 'PENDING' ? "bg-warning hover:bg-warning/90" : "bg-danger hover:bg-danger/90"
                                 }`}
                         >

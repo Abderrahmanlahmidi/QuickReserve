@@ -47,10 +47,10 @@ export class EventsService {
   }
 
   async update(id: string, updateEventDto: UpdateEventDto) {
-    const values: any = { ...updateEventDto };
-    if (updateEventDto.date) {
-      values.date = new Date(updateEventDto.date);
-    }
+    const values: Partial<typeof schema.events.$inferInsert> = {
+      ...updateEventDto,
+      date: updateEventDto.date ? new Date(updateEventDto.date) : undefined,
+    };
 
     const [event] = await this.db
       .update(schema.events)

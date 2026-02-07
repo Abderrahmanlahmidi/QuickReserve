@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Search, Filter, Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { EventExploreProps } from "../../../types/events";
@@ -25,20 +25,12 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
 
     const totalPages = Math.max(1, Math.ceil(filteredEvents.length / pageSize));
 
+    const safeCurrentPage = Math.min(currentPage, totalPages);
+
     const pagedEvents = useMemo(() => {
-        const start = (currentPage - 1) * pageSize;
+        const start = (safeCurrentPage - 1) * pageSize;
         return filteredEvents.slice(start, start + pageSize);
-    }, [filteredEvents, currentPage]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [search, selectedCategory]);
-
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        }
-    }, [currentPage, totalPages]);
+    }, [filteredEvents, safeCurrentPage]);
 
     return (
         <div className="space-y-8">
@@ -49,7 +41,10 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
                         type="text"
                         placeholder="Search events..."
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1);
+                        }}
                         className="w-full pl-12 pr-4 py-3 bg-white border border-neutral-200 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900 placeholder:text-neutral-400"
                     />
                 </div>
@@ -57,7 +52,10 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
                     <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
                     <select
                         value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedCategory(e.target.value);
+                            setCurrentPage(1);
+                        }}
                         className="w-full pl-12 pr-4 py-3 bg-white border border-neutral-200 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-neutral-900 appearance-none cursor-pointer"
                     >
                         <option value="all">All Categories</option>
@@ -133,7 +131,7 @@ export default function EventExplore({ initialEvents, categories }: EventExplore
 
             {totalPages > 1 && (
                 <Pagination
-                    currentPage={currentPage}
+                    currentPage={safeCurrentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />

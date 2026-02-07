@@ -19,7 +19,7 @@ interface EventFormOverlayProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: EventFormData) => void;
-    initialData?: any;
+    initialData?: Partial<EventFormData> | null;
     categories: { id: string; name: string }[];
     title: string;
     isLoading?: boolean;
@@ -44,10 +44,12 @@ export default function EventFormOverlay({
     useEffect(() => {
         if (initialData) {
             // Format date for datetime-local input
-            const date = new Date(initialData.date);
-            const formattedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-                .toISOString()
-                .slice(0, 16);
+            const dateValue = initialData.date ? new Date(initialData.date) : null;
+            const formattedDate = dateValue
+                ? new Date(dateValue.getTime() - dateValue.getTimezoneOffset() * 60000)
+                    .toISOString()
+                    .slice(0, 16)
+                : "";
 
             reset({
                 ...initialData,

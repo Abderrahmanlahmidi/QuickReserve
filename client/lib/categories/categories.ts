@@ -5,7 +5,7 @@ export async function getCategories() {
         });
         if (!response.ok) return [];
         return response.json();
-    } catch (e) {
+    } catch {
         return [];
     }
 }

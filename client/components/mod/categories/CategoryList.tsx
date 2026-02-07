@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Edit2, Trash2, Plus, Tag } from "lucide-react";
 import CategoryFormOverlay from "./CategoryFormOverlay";
 import DeleteConfirmModal from "../my-events/DeleteConfirmModal";
@@ -16,8 +16,12 @@ interface CategoryListProps {
     initialCategories: Category[];
 }
 
+type CategoryFormData = {
+    name: string;
+};
+
 export default function CategoryList({ initialCategories }: CategoryListProps) {
-    const [categories, setCategories] = useState<Category[]>(initialCategories);
+    const categories = initialCategories;
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -27,20 +31,16 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
 
     const totalPages = Math.max(1, Math.ceil(categories.length / pageSize));
 
-    const pagedCategories = useMemo(() => {
-        const start = (currentPage - 1) * pageSize;
-        return categories.slice(start, start + pageSize);
-    }, [categories, currentPage]);
+    const safeCurrentPage = Math.min(currentPage, totalPages);
 
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        }
-    }, [currentPage, totalPages]);
+    const pagedCategories = useMemo(() => {
+        const start = (safeCurrentPage - 1) * pageSize;
+        return categories.slice(start, start + pageSize);
+    }, [categories, safeCurrentPage]);
 
     // Create/Update Mutation
     const categoryMutation = useMutation({
-        mutationFn: async (data: any) => {
+        mutationFn: async (data: CategoryFormData) => {
             if (selectedCategory) {
                 return axiosClient.patch(`/categories/${selectedCategory.id}`, data);
             }
@@ -137,7 +137,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
 
             {totalPages > 1 && (
                 <Pagination
-                    currentPage={currentPage}
+                    currentPage={safeCurrentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />
@@ -147,7 +147,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
                 onSubmit={(data) => categoryMutation.mutate(data)}
-                initialData={selectedCategory}
+                initialData={selectedCategory ? { name: selectedCategory.name } : undefined}
                 title={selectedCategory ? "Edit Category" : "Create New Category"}
                 isLoading={categoryMutation.isPending}
             />

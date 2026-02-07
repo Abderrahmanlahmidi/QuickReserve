@@ -63,7 +63,6 @@ export default function Navbar({ }: Props) {
   useEffect(() => {
     setIsOpen(false);
     setIsProfileOpen(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const handleLogout = () => {

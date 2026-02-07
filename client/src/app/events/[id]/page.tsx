@@ -1,22 +1,24 @@
 import { getEventById } from "../../../../lib/events/event";
 import { getCategories } from "../../../../lib/categories/categories";
-import { Calendar, MapPin, Users, Info, ArrowLeft, Tag, Share2, Heart } from "lucide-react";
+import { Calendar, MapPin, Users, Info, ArrowLeft, Share2, Heart } from "lucide-react";
 import Link from "next/link";
 import ReservationForm from "../../../../components/mod/events/ReservationForm";
 import { notFound } from "next/navigation";
+import type { Event } from "../../../../types/events";
+import type { Category } from "../../../../types/categories";
 
 export default async function EventDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [event, categories] = await Promise.all([
+    const [event, categories] = (await Promise.all([
         getEventById(id),
         getCategories()
-    ]);
+    ])) as [Event | null, Category[]];
 
     if (!event) {
         notFound();
     }
 
-    const category = categories.find((c: any) => c.id === event.categoryId);
+    const category = categories.find((c) => c.id === event.categoryId);
 
     return (
         <div className="min-h-screen bg-white pt-24 pb-20">
