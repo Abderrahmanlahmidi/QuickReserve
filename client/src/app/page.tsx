@@ -1,4 +1,4 @@
-import Hero from "../../components/mod/home/Hero";
+import Hero from "../../components/mod/Home/Hero";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
 
