@@ -57,7 +57,7 @@ const readUserFromCookie = (): User | null => {
 interface ReservationFormProps {
     eventId: string;
     capacity: number;
-    creatorId: string;
+    creatorId?: string;
 }
 
 export default function ReservationForm({ eventId, capacity, creatorId }: ReservationFormProps) {
@@ -107,7 +107,7 @@ export default function ReservationForm({ eventId, capacity, creatorId }: Reserv
         },
     });
 
-    const isCreator = user?.id === creatorId;
+    const isCreator = !!creatorId && user?.id === creatorId;
 
     const handleReserve = () => {
         if (!user) {

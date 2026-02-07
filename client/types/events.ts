@@ -9,6 +9,7 @@ export interface Event {
     capacity: number;
     status: string;
     categoryId: string;
+    createdBy?: string;
 }
 
 export interface EventExploreProps {
