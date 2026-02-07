@@ -10,12 +10,14 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const mockDb = {};
     const mockJwtService: Pick<JwtService, 'signAsync' | 'verifyAsync'> = {
-      signAsync: jest.fn(async () => 'test-token'),
-      verifyAsync: jest.fn(async () => ({
-        sub: 'test-user-id',
-        email: 'test@example.com',
-        role: 'PARTICIPANT',
-      })),
+      signAsync: jest.fn(() => Promise.resolve('test-token')),
+      verifyAsync: jest.fn(() =>
+        Promise.resolve({
+          sub: 'test-user-id',
+          email: 'test@example.com',
+          role: 'PARTICIPANT',
+        }),
+      ),
     };
 
     const module: TestingModule = await Test.createTestingModule({

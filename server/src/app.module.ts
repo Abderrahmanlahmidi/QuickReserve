@@ -12,4 +12,4 @@ import { ReservationsModule } from './reservations/reservations.module';
   controllers: [AppController, CategoriesController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

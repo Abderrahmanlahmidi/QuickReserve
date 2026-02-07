@@ -8,7 +8,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 
 @Injectable()
 export class EventsService {
-  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) { }
+  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) {}
 
   async create(createEventDto: CreateEventDto, userId: string) {
     const [event] = await this.db

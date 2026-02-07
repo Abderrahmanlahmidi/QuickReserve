@@ -18,7 +18,7 @@ export class UsersService {
   constructor(
     @Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(createUserDto: CreateUserDto) {
     const { firstName, lastName, email, password } = createUserDto;
@@ -73,7 +73,8 @@ export class UsersService {
       };
     } catch (error: unknown) {
       console.error(error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       throw new InternalServerErrorException({
         message: 'Error creating user',
         error: errorMessage,
@@ -84,7 +85,6 @@ export class UsersService {
   async login(loginDto: LoginUserDto) {
     const { email, password } = loginDto;
     console.log('Login attempt for:', email);
-
 
     const results = await this.db
       .select({
@@ -101,7 +101,6 @@ export class UsersService {
       .limit(1);
 
     const user = results[0];
-
 
     if (!user) {
       console.log('User not found');

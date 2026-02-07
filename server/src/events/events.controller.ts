@@ -18,12 +18,15 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) { }
+  constructor(private readonly eventsService: EventsService) {}
 
   @Post()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('ADMIN')
-  create(@Body() createEventDto: CreateEventDto, @GetUser('sub') userId: string) {
+  create(
+    @Body() createEventDto: CreateEventDto,
+    @GetUser('sub') userId: string,
+  ) {
     return this.eventsService.create(createEventDto, userId);
   }
 

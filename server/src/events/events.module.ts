@@ -5,8 +5,8 @@ import { DrizzleModule } from '../db/drizzle.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-    imports: [DrizzleModule, JwtModule],
-    controllers: [EventsController],
-    providers: [EventsService],
+  imports: [DrizzleModule, JwtModule],
+  controllers: [EventsController],
+  providers: [EventsService],
 })
-export class EventsModule { }
+export class EventsModule {}

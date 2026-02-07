@@ -13,7 +13,7 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 
 @Injectable()
 export class ReservationsService {
-  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) { }
+  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) {}
 
   async create(createReservationDto: CreateReservationDto, userId: string) {
     const { eventId } = createReservationDto;
@@ -43,7 +43,9 @@ export class ReservationsService {
         ),
       );
 
-    const alreadyReserved = activeReservations.some(r => r.status === 'PENDING' || r.status === 'CONFIRMED');
+    const alreadyReserved = activeReservations.some(
+      (r) => r.status === 'PENDING' || r.status === 'CONFIRMED',
+    );
 
     if (alreadyReserved) {
       throw new ConflictException(
@@ -53,11 +55,16 @@ export class ReservationsService {
 
     // 3. Check capacity against CONFIRMED + PENDING to be safe
     const reservations = await this.db
-      .select({ id: schema.reservations.id, status: schema.reservations.status })
+      .select({
+        id: schema.reservations.id,
+        status: schema.reservations.status,
+      })
       .from(schema.reservations)
       .where(eq(schema.reservations.eventId, eventId));
 
-    const activeCount = reservations.filter(r => r.status === 'CONFIRMED' || r.status === 'PENDING').length;
+    const activeCount = reservations.filter(
+      (r) => r.status === 'CONFIRMED' || r.status === 'PENDING',
+    ).length;
 
     if (activeCount >= event.capacity) {
       throw new BadRequestException('Event is full');
